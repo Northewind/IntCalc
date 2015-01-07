@@ -32,6 +32,7 @@ prs_uncomm (char **str)
 }
 
 
+// Find first character ch in string str out of qoutes
 static int
 prs_find (char *str, char ch)
 {
@@ -74,7 +75,7 @@ prs_label (char **str)
 	labl [len] = 0;
 	// Korrektnost imeni metki
 	if (! prs_isid_correct (labl))  {
-		ui_sndmes (MT_ERROR, "Ne korrektnoe imya metki");
+		ui_sndmes (MT_ERROR, "Invalid label name");
 	}
 	// Obrezka metki ot instrukcii
 	*str += semi;
@@ -86,20 +87,23 @@ prs_label (char **str)
 static cmdcode_t
 prs_cmd (char **str)
 {
-//	char *cmd, *cmd_it, *str_it;
-//	str_it = *str;
-//	cmdcode_t c;
-//	for (c = MOV;  c <= HLT;  c++)  {
-//		cmd = cmd_it = oc_cmdstr (c);
-//		while (*cmd_it != 0  &&  *str_it != 0) {
-//			if (*cmd_it != *str_it)  goto next_cmd;
-//			cmd_it++;
-//			str_it++;
-//		}
-//		if (*cmd_it == *str_it)  break;
-//next_cmd:	free (cmd);
-//	}
-//	return c;
+	const char *cmd;
+	char *str_it;
+	cmdcode_t c;
+	for (c = MOV;  c <= HLT;  c++)  {
+		cmd = oc_cmdstr (c);
+		str_it = *str;
+		while (*cmd == *str_it  &&  *str_it != 0) {
+			cmd++;
+			str_it++;
+		}
+		if (*cmd == 0)  {
+			while (isspace(*str_it))  str_it++;
+			*str = str_it;
+			return c;
+		}
+	}
+	return -1;
 }
 
 
@@ -107,9 +111,15 @@ instr_t
 parse (char *str)
 {
 	prs_uncomm (&str);
-	int addr = prs_label (&str);
- 	prs_cmd (&str);
-	printf ("%d   >>>%s<<<\n", addr, str);
-	if (strcmp (str, "hlt") == 0) exit (0);
+	if  (*str == 0)  return (instr_t) { .addr = -1 };
+	instr_t res = { .addr = prs_label (&str) };
+	if  (*str == 0)  return (instr_t) { .addr = -1 };
+ 	cmdcode_t cmd = prs_cmd (&str);
+
+	printf ("addr: %d   cmd: %s   tail: %s\n",
+		res.addr, oc_cmdstr (cmd), str);
+	if (cmd == HLT)  exit (0);
+
+	return res;
 }
 

@@ -6,15 +6,7 @@
 typedef struct {
 	int addr;
 	opcode_t opcode;
-	union {
-		argset_r_t   as_r;
-		argset_rr_t  as_rr;
-		argset_rc_t  as_rc;
-		argset_cc_t  as_cc;
-		argset_c_t   as_c;
-		argset_cr_t  as_cr;
-		argset_a_t   as_a;
-	};
+	argset_t as;
 } instr_t;
 
 

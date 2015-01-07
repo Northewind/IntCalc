@@ -10,16 +10,14 @@
 dint_t
 i_crt  (long double nom)
 {
-	dint_t res = { .low = nom,  .upp = nom };
-	return res;
+	return (dint_t) { .low = nom,  .upp = nom };
 }
 
 dint_t
 i_crt2 (long double lim1, long double lim2)
 {
-	dint_t res = {	.low = fmin (lim1, lim2),
-			.upp = fmax (lim1, lim2)  };
-	return res;
+	return (dint_t) { .low = fmin (lim1, lim2),
+			  .upp = fmax (lim1, lim2)  };
 }
 
 
@@ -31,27 +29,8 @@ i_crt3 (long double nom, long double dev1, long double dev2)
 		dev1 = dev2;
 		dev2 = tmp;
 	}
-	dint_t res = {	.low = nom + dev1,
-			.upp = nom + dev2 };
-	return res;
-}
-
-
-dint_t *
-i_copy (const dint_t *s)
-{
-	dint_t *res = malloc (sizeof (dint_t));
-	*res = *s;
-	return res;
-}
-
-
-dint_t
-i_copy_val (const dint_t *s)
-{
-	dint_t res = {	.low = s -> low,
-			.upp = s -> upp  };
-	return res;	
+	return (dint_t) { .low = nom + dev1,
+			  .upp = nom + dev2 };
 }
 
 
@@ -104,20 +83,17 @@ i_sub (dint_t *i1, const dint_t *i2)
 }
 
 
-static dint_t *
+static dint_t
 array_min_max (int count, const long double arr[])
 {
-	dint_t *res = malloc (sizeof (dint_t));
-	res -> low = arr[0];
-	res -> upp = arr[0];
-	int i;
-	for (i = 1;  i < count;  i++) {
-		if (res -> low > arr[i]) {
-			res -> low = arr[i];
+	dint_t res = { .low = arr[0],   .upp = arr[0] };
+	for (int i = 1;  i < count;  i++) {
+		if (res.low > arr[i]) {
+			res.low = arr[i];
 			continue;
 		}
-		if (res -> upp < arr[i])
-			res -> upp = arr[i];
+		if (res.upp < arr[i])
+			res.upp = arr[i];
 	}
 	return res;
 }
@@ -126,14 +102,12 @@ array_min_max (int count, const long double arr[])
 dint_t *
 i_mul (dint_t *m1, const dint_t *m2)
 {
-	long double p[4];
-	p[0] = m1 -> low * m2 -> low;
-	p[1] = m1 -> low * m2 -> upp;
-	p[2] = m1 -> upp * m2 -> low;
-	p[3] = m1 -> upp * m2 -> upp;
-	dint_t *from_arr = array_min_max(4, p);
-	*m1 = *from_arr;
-	free (from_arr);
+	long double p[] = {
+		m1 -> low * m2 -> low,
+		m1 -> low * m2 -> upp,
+		m1 -> upp * m2 -> low,
+		m1 -> upp * m2 -> upp };
+	*m1 = array_min_max (4, p);
 	return m1;
 }
 
@@ -141,14 +115,12 @@ i_mul (dint_t *m1, const dint_t *m2)
 dint_t *
 i_div (dint_t *m1, const dint_t *m2)
 {
-	long double p[4];
-	p[0] = m1 -> low / m2 -> low;
-	p[1] = m1 -> low / m2 -> upp;
-	p[2] = m1 -> upp / m2 -> low;
-	p[3] = m1 -> upp / m2 -> upp;
-	dint_t *from_arr = array_min_max(4, p);
-	*m1 = *from_arr;
-	free (from_arr);
+	long double p[] = {
+		m1 -> low / m2 -> low,
+		m1 -> low / m2 -> upp,
+		m1 -> upp / m2 -> low,
+		m1 -> upp / m2 -> upp };
+	*m1 = array_min_max (4, p);
 	return m1;
 }
 
@@ -225,8 +197,7 @@ arg_min (long double (*f)(long double), const dint_t *s, long double error)
 		}
 		iter++;
 		if (iter >= 10000000u) {
-			ui_sndmes (MT_ERROR,
-				"Previsheno chislo iteraciy pri poiske minimuma");
+			ui_sndmes (MT_ERROR, "Max iterations reached");
 		}
 
 	} while (rbnd - lbnd >= 2.1*error);
@@ -278,16 +249,15 @@ i_tan (dint_t *s)
 	s -> low = s -> upp = 1;
 	i_div (s, &tmp);
 	i_dec (s);
-	return i_pow(s, 0.5L);
+	return i_pow (s, 0.5L);
 }
 
 
 dint_t *
 i_cot (dint_t *s)
 {	
-	dint_t *si = i_sin (i_copy (s));
-	i_div (i_cos (s), si);
-	free (si);
+	dint_t si = *s;
+	i_div (i_cos (s), i_sin (&si));
 	return s;
 }
 
@@ -376,14 +346,3 @@ i_asstr (const dint_t *s)
 	return res;
 }
 #undef STR_SZ
-
-
-//#define DEBUG_CORE
-#ifdef DEBUG_CORE
-int
-main (int argc, char *argv[])
-{
-	return 0;
-}
-#endif		// DEBUG_CORE
-

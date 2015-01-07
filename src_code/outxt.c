@@ -56,13 +56,3 @@ ot_freeall ()
 	txt = txt_end = NULL;
 	addr_cnt = -1;
 }
-
-
-//#define DEBUG_OUTXT
-#ifdef DEBUG_OUTXT
-int
-main ()
-{
-	return 0;
-}
-#endif  //OUTXT_H

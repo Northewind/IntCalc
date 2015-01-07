@@ -64,13 +64,3 @@ var_freeall ()
 	}
 	vars = vars_end = NULL;
 }
-
-
-//#define DEBUG_VARS
-#ifdef DEBUG_VARS
-int
-main ()
-{
-	return 0;
-}
-#endif  //DEBUG_VARS

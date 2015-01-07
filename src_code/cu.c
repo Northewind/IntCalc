@@ -30,7 +30,7 @@ ret ()
 {
 	int retaddr = ad_pop ();
 	if (retaddr == -1) {
-		ui_sndmes (MT_ERROR, "Vstretilsya RET, no ne bilo CALL");
+		ui_sndmes (MT_ERROR, "RET found, but CALL was not present");
 	}
 	jmp (retaddr);
 }
@@ -63,29 +63,29 @@ execu (instr_t i)
 	dint_t c, c1, c2, *r, *r1, *r2;
 	switch (oc_argset_type (i.opcode)) {
 		case R:
-			r = var_get (i.as_r.r);
+			r = var_get (i.as.as_r.r);
 			break;
 		case RR:
-			r1 = var_get (i.as_rr.r1);
-			r2 = var_get (i.as_rr.r2);
+			r1 = var_get (i.as.as_rr.r1);
+			r2 = var_get (i.as.as_rr.r2);
 			break;
 		case RC:
-			r = var_get (i.as_rc.r);
-			c = i.as_rc.c;
+			r = var_get (i.as.as_rc.r);
+			c = i.as.as_rc.c;
 			break;
 		case CC:
-			c1 = i.as_cc.c1;
-			c2 = i.as_cc.c2;
+			c1 = i.as.as_cc.c1;
+			c2 = i.as.as_cc.c2;
 			break;
 		case C:
-			c = i.as_c.c;
+			c = i.as.as_c.c;
 			break;
 		case CR:
-			c = i.as_cr.c;
-			r = var_get (i.as_cr.r);
+			c = i.as.as_cr.c;
+			r = var_get (i.as.as_cr.r);
 			break;
 		case A:
-			a = i.as_a.a;
+			a = i.as.as_a.a;
 			break;
 		case NO:
 			break;
@@ -229,14 +229,3 @@ proc (instr_t i)
 		}
 	}
 }
-
-
-//#define DEBUG_PROC
-#ifdef DEBUG_PROC
-int
-main ()
-{
-	return 0;
-}
-#endif //DEBUG_PROC
-

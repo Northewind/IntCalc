@@ -56,13 +56,3 @@ ad_hash (char *str)
 	}
 	return hash;
 }
-
-
-//#define DEBUG_ADDR
-#ifdef DEBUG_ADDR
-int
-main ()
-{
-	return 0;	
-}
-#endif //DEBUG_ADDR

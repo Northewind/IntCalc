@@ -58,9 +58,20 @@ typedef struct {
 } argset_a_t;
 
 
+typedef union {
+	argset_r_t   as_r;
+	argset_rr_t  as_rr;
+	argset_rc_t  as_rc;
+	argset_cc_t  as_cc;
+	argset_c_t   as_c;
+	argset_cr_t  as_cr;
+	argset_a_t   as_a;
+} argset_t;
+
+
 typedef enum {
 	R, RR, RC, CC, C, CR, A, NO
-} argset_t;
+} argset_type;
 
 
 typedef enum {
@@ -71,7 +82,7 @@ typedef enum {
 } cmdcode_t;
 
 
-argset_t
+argset_type
 oc_argset_type (opcode_t oc);
 
 const char *

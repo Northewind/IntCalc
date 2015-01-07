@@ -79,13 +79,3 @@ in_getplay ()
 	in_pnt = in_pnt -> next;
 	return  res;
 }
-
-
-//#define DEBUG_INSTR
-#ifdef DEBUG_INSTR
-int
-main ()
-{
-		return 0;
-}
-#endif  //DEBUG_INSTR

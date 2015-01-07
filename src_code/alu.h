@@ -8,8 +8,8 @@ typedef struct {
 
 
 typedef enum cmp_status {
-	CMP_UNK=0, CMP_EQ=2,  CMP_NE=4,   CMP_GT=8,   CMP_GE=16,
-	CMP_LT=32, CMP_LE=64, CMP_IN=128, CMP_OUT=256
+	CMP_UNK=0,  CMP_EQ=2,   CMP_NE=4,   CMP_GT=8,   CMP_GE=16,
+	CMP_LT=32,  CMP_LE=64,  CMP_IN=128, CMP_OUT=256
 } cmp_status_t;
 
 
@@ -21,12 +21,6 @@ i_crt2 (long double lim1, long double lim2);
 
 dint_t
 i_crt3 (long double nom, long double dev1, long double dev2);
-
-dint_t *
-i_copy (const dint_t *s);
-
-dint_t
-i_copy_val (const dint_t *s);
 
 void
 i_xchg (dint_t *i1, dint_t *i2);

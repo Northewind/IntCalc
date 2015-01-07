@@ -3,10 +3,10 @@
 #include "opcode.h"
 
 
-argset_t
+argset_type
 oc_argset_type (opcode_t oc)
 {
-	argset_t res;
+	argset_type res;
 	switch (oc) {
 		case INV_R:
 		case INC_R:
@@ -172,13 +172,3 @@ oc_cmdstr (cmdcode_t cc)
 			return NULL;
 	}
 }
-
-
-//#define DEBUG_OPCODE
-#ifdef DEBUG_OPCODE
-int
-main ()
-{
-	return 0;
-}
-#endif  //DEBUG_OPCODE
