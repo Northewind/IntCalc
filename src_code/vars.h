@@ -10,12 +10,6 @@ var_set (int var_id, dint_t var_value);
 dint_t *
 var_get (int var_id);
 
-char *
-var_asstr (int var_id);
-
-void
-var_prnall ();
-
 void
 var_freeall ();
 

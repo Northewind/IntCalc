@@ -30,11 +30,4 @@ in_set (int addr);
 instr_t *
 in_getplay ();
 
-char *
-in_asstr ();
-
-void
-in_prnall ();
-
-
-#endif  // !PROC_INSTR_H
+#endif  // ! PROC_INSTR_H

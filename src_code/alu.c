@@ -378,49 +378,11 @@ i_asstr (const dint_t *s)
 #undef STR_SZ
 
 
-#define STR_SZ 4
-char *
-i_cmp_status_asstr (cmp_status_t s)
-{
-	char *res = malloc (STR_SZ);
-	if ((s & CMP_EQ) != 0) strncpy (res, "EQ", STR_SZ);
-	else if ((s & CMP_GT) != 0) strncpy (res, "GT", STR_SZ);
-	else if ((s & CMP_GE) != 0) strncpy (res, "GE", STR_SZ);
-	else if ((s & CMP_LT) != 0) strncpy (res, "LT", STR_SZ);
-	else if ((s & CMP_LE) != 0) strncpy (res, "LE", STR_SZ);
-	else if ((s & CMP_IN) != 0) strncpy (res, "IN", STR_SZ);
-	else if ((s & CMP_OUT) != 0) strncpy (res, "OUT", STR_SZ);
-	else if ((s & CMP_UNK) != 0) strncpy (res, "UNK", STR_SZ);
-	return res;
-}
-#undef STR_SZ
-
-
 //#define DEBUG_CORE
 #ifdef DEBUG_CORE
-void
-prnt (const char *op, const dint_t *s)
-{
-	char *s_str = i_asstr (s);
-	printf ("%s%s\n", op, s_str);
-	free (s_str);
-}
-
 int
 main (int argc, char *argv[])
 {
-	char *tmp_str;
-	dint_t s, sres;
-	s = i_crt2 (0.02, 1.2);
-	prnt ("s = ", &s);
-	sres = i_copy_val (&s);
-	i_inv (&sres);
-	prnt ("sres = inv(s) = ", &sres);
-	tmp_str = i_cmp_status_asstr (i_cmp (&s, &sres));
-	printf ("cmp (s, sres) = %s\n", tmp_str);
-	free (tmp_str);
-	i_inv (&sres);
-	prnt ("sres = inv (sres) = ", &sres);
 	return 0;
 }
 #endif		// DEBUG_CORE

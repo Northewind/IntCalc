@@ -10,7 +10,4 @@ ot_gettxt (int addr);
 void
 ot_freeall ();
 
-void
-ot_prnall ();
-
 #endif  //!OUTXT_H

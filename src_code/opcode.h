@@ -71,16 +71,10 @@ typedef enum {
 } cmdcode_t;
 
 
-char *
-oc_asstr (opcode_t oc);
-
 argset_t
 oc_argset_type (opcode_t oc);
 
-char *
-oc_argset_asstr (argset_t as);
-
-char *
+const char *
 oc_cmdstr (cmdcode_t cc);
 
-#endif  // !OPCODE_H
+#endif  // ! OPCODE_H

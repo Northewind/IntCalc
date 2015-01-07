@@ -88,8 +88,5 @@ i_acot (dint_t *s);
 char *
 i_asstr (const dint_t *s);
 
-char *
-i_cmp_status_asstr (cmp_status_t s);
 
-
-#endif  // !ALU_H
+#endif  // ! ALU_H

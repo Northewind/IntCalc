@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "vars.h"
 
 
@@ -53,26 +52,6 @@ var_get (int var_id)
 }
 
 
-char *
-var_asstr (int var_id)
-{
-	dint_t *varval = var_get (var_id);
-	return i_asstr (varval);
-}
-
-
-void
-var_prnall ()
-{
-	char *varstr;
-	for (vars_t var = vars;  var;  var = var -> next) {
-		varstr = i_asstr (& var -> value);
-		printf ("var: %d   val: %s\n", var -> id, varstr);
-		free (varstr);
-	}
-}
-
-
 void
 var_freeall ()
 {
@@ -92,14 +71,6 @@ var_freeall ()
 int
 main ()
 {
-	dint_t *v1 = var_get (1);
-	dint_t v2 = i_crt2 (10,10.4);
-	var_set (2, v2);
-	dint_t v3 = i_copy_val (&v2);
-	var_set (3, v3);
-	i_mul (var_get (3), var_get (2));
-	var_set (2, i_crt2 (49.8, 50.2));
-	var_prnall ();
 	return 0;
 }
 #endif  //DEBUG_VARS

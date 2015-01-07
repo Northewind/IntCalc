@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "addr.h"
 
 
@@ -47,17 +46,6 @@ ad_free ()
 }
 
 
-void
-ad_prnall ()
-{
-	ad_stack_t cur = adstack;
-	while (cur) {
-		printf ("addr: 0x%X\n", cur -> addr);
-		cur = cur -> prev;
-	}
-}
-
-
 int
 ad_hash (char *str)
 {
@@ -74,26 +62,7 @@ ad_hash (char *str)
 #ifdef DEBUG_ADDR
 int
 main ()
-{	
-	ad_push (ad_hash("ba"));
-	ad_push (6);
-	ad_push (8);
-	ad_push (11);
-	ad_push (13);
-	ad_push (16);
-	ad_push (18);
-	ad_push (21);
-	ad_prnall ();
-	char *mes = "4 raza POP, 2 raz PUSH";
-	printf ("%s\n", mes);
-	int a = ad_pop ();
-	ad_pop ();
-	ad_pop ();
-	ad_pop ();
-	ad_push (a);
-	ad_push (ad_hash (mes));
-	ad_prnall ();
-	ad_free ();
-	ad_prnall ();
+{
+	return 0;	
 }
 #endif //DEBUG_ADDR

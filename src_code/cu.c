@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "cu.h"
 #include "vars.h"
 #include "addr.h"
@@ -237,76 +236,6 @@ proc (instr_t i)
 int
 main ()
 {
-	int iaddr = -1;
-	int txtaddr1 = ot_addtxt ("Posledovatelnost fibonicci (12 chlenov):\n");
-	instr_t i = { .addr=++iaddr, .opcode=OUT_A, .as_a.a=txtaddr1};
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = MOV_RC;
-	i.as_rc.r = 1;
-	i.as_rc.c = i_crt2 (1, 10);
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = MOV_RC;
-	i.as_rc.r = 2;
-	i.as_rc.c = i_crt2 (1, 12);
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = OUT_R;
-	i.as_r.r = 1;
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = OUT_R;
-	i.as_r.r = 2;
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = MOV_RC;
-	i.as_rc.r = 3;
-	i.as_rc.c = i_crt (0);
-	proc (i);
-	// Sled
-	int loop = i.addr = ++iaddr;
-	i.opcode = ADD_RR;
-	i.as_rr.r1 = 1;
-	i.as_rr.r2 = 2;
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = OUT_R;
-	i.as_r.r = 1;
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = XCHG_RR;
-	i.as_rr.r1 = 1;
-	i.as_rr.r2 = 2;
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = INC_R;
-	i.as_r.r = 3;
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = CMP_RC;
-	i.as_rc.r = 3;
-	i.as_rc.c = i_crt (10);
-	proc (i);
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = JLT_A;
-	i.as_a.a = loop;
-	proc (i);
-	in_prnall ();
-	// Sled
-	i.addr = 0;//++iaddr;
-	i.opcode = HLT;
-	proc (i);
 	return 0;
 }
 #endif //DEBUG_PROC
