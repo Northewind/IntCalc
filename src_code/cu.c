@@ -48,8 +48,9 @@ out (dint_t *i)
 
 static void
 hlt () {
-	ad_free ();
+	ad_freeall ();
 	in_freeall ();
+	ot_freeall ();
 	var_freeall ();
 	exit (0);
 }
@@ -62,32 +63,32 @@ execu (instr_t i)
 	int a;
 	dint_t c, c1, c2, *r, *r1, *r2;
 	switch (oc_argset_type (i.opcode)) {
-		case R:
-			r = var_get (i.as.as_r.r);
+		case AS_R:
+			r = var_get (i.args.as_r.r);
 			break;
-		case RR:
-			r1 = var_get (i.as.as_rr.r1);
-			r2 = var_get (i.as.as_rr.r2);
+		case AS_RR:
+			r1 = var_get (i.args.as_rr.r1);
+			r2 = var_get (i.args.as_rr.r2);
 			break;
-		case RC:
-			r = var_get (i.as.as_rc.r);
-			c = i.as.as_rc.c;
+		case AS_RC:
+			r = var_get (i.args.as_rc.r);
+			c = i.args.as_rc.c;
 			break;
-		case CC:
-			c1 = i.as.as_cc.c1;
-			c2 = i.as.as_cc.c2;
+		case AS_CC:
+			c1 = i.args.as_cc.c1;
+			c2 = i.args.as_cc.c2;
 			break;
-		case C:
-			c = i.as.as_c.c;
+		case AS_C:
+			c = i.args.as_c.c;
 			break;
-		case CR:
-			c = i.as.as_cr.c;
-			r = var_get (i.as.as_cr.r);
+		case AS_CR:
+			c = i.args.as_cr.c;
+			r = var_get (i.args.as_cr.r);
 			break;
-		case A:
-			a = i.as.as_a.a;
+		case AS_A:
+			a = i.args.as_a.a;
 			break;
-		case NO:
+		case AS_NO:
 			break;
 	}
 	switch (i.opcode) {

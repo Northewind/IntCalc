@@ -34,7 +34,7 @@ ad_pop ()
 
 
 void
-ad_free ()
+ad_freeall ()
 {
 	ad_stack_t rmv;
 	while (adstack) {

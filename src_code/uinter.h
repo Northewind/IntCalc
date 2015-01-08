@@ -3,7 +3,7 @@
 
 
 typedef enum {
-	MT_ERROR,  MT_PREERROR,  MT_RSLT,  MT_INFO
+	MT_ERROR,  MT_WARN,  MT_RSLT,  MT_INFO
 } msg_t;
 
 

@@ -8,9 +8,9 @@ int
 ad_pop ();
 
 void
-ad_free ();
+ad_freeall ();
 
 int
 ad_hash (char *str);
 
-#endif //!ADDR_H
+#endif // ! ADDR_H

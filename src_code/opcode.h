@@ -3,6 +3,8 @@
 
 #include "alu.h"
 
+#define OPCODE_UNDEF (-1)
+
 typedef enum {
 	MOV_RC,  MOV_RR,  XCHG_RR,
 	ADD_RC,  ADD_RR,
@@ -60,17 +62,18 @@ typedef struct {
 
 typedef union {
 	argset_r_t   as_r;
+	argset_c_t   as_c;
+	argset_a_t   as_a;
 	argset_rr_t  as_rr;
 	argset_rc_t  as_rc;
 	argset_cc_t  as_cc;
-	argset_c_t   as_c;
 	argset_cr_t  as_cr;
-	argset_a_t   as_a;
 } argset_t;
 
 
 typedef enum {
-	R, RR, RC, CC, C, CR, A, NO
+	AS_R = 1,  AS_RR = 2,  AS_RC = 4,  AS_CC = 8,
+	AS_C = 16, AS_CR = 32, AS_A = 64,  AS_NO = 128
 } argset_type;
 
 
@@ -85,7 +88,13 @@ typedef enum {
 argset_type
 oc_argset_type (opcode_t oc);
 
+int
+cmd_argset_type (cmdcode_t cc);
+
 const char *
-oc_cmdstr (cmdcode_t cc);
+cmd_str (cmdcode_t cc);
+
+opcode_t
+cmd_to_opcode (cmdcode_t cc, argset_type ast);
 
 #endif  // ! OPCODE_H

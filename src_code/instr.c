@@ -2,7 +2,7 @@
 #include "instr.h"
 
 
-// Hranenie instrukciy programmi - dvusvyazniy spisok
+// Double linked list for instructions storing
 typedef struct prog_t {
         instr_t instr;
         struct prog_t *prev;
@@ -10,10 +10,10 @@ typedef struct prog_t {
 } *prog_t;
 
 
-// Ukazateli na nachalo i konec spiska instrukciy
+// Handles for begin and end of instruction list
 static prog_t prog     = NULL;
 static prog_t prog_end = NULL;
-// Ukazatel na tekushuu instrukciyu
+// Handle for current instruction node
 static prog_t in_pnt = NULL;
 
 

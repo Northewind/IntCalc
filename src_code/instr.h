@@ -6,7 +6,7 @@
 typedef struct {
 	int addr;
 	opcode_t opcode;
-	argset_t as;
+	argset_t args;
 } instr_t;
 
 

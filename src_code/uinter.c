@@ -10,8 +10,8 @@ ui_sndmes (msg_t type, char *mes)
 			fprintf (stderr, "Error: %s\n", mes);
 			//exit (1);
 			break;
-		case MT_PREERROR:
-			fprintf (stderr, "Error: %s", mes);
+		case MT_WARN:
+			fprintf (stderr, "Warning: %s\n", mes);
 			break;
 		case MT_RSLT:
 			printf ("%s", mes);

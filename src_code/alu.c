@@ -172,7 +172,7 @@ i_neg (dint_t *s)
 }
 
 
-// Poisk minimuma funkcii na intervale metodom deleniya otrezka popolam
+// Find minimum of function in interval using bisection method
 static long double
 arg_min (long double (*f)(long double), const dint_t *s, long double error)
 {

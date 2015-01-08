@@ -6,7 +6,6 @@
 argset_type
 oc_argset_type (opcode_t oc)
 {
-	argset_type res;
 	switch (oc) {
 		case INV_R:
 		case INC_R:
@@ -20,8 +19,7 @@ oc_argset_type (opcode_t oc)
 		case ATAN_R:
 		case ACOT_R:
 		case OUT_R:
-			res = R;
-			break;
+			return AS_R;
 		case MOV_RR:
 		case XCHG_RR:
 		case ADD_RR:
@@ -29,25 +27,20 @@ oc_argset_type (opcode_t oc)
 		case MUL_RR:
 		case DIV_RR:
 		case CMP_RR:
-			res = RR;
-			break;
+			return AS_RR;
 		case MOV_RC:
 		case ADD_RC:
 		case SUB_RC:
 		case MUL_RC:
 		case DIV_RC:
 		case CMP_RC:
-			res = RC;
-			break;
+			return AS_RC;
 		case CMP_CC:
-			res = CC;
-			break;
+			return AS_CC;
 		case OUT_C:
-			res = C;
-			break;
+			return AS_C;
 		case CMP_CR:
-			res = CR;
-			break;
+			return AS_CR;
 		case JMP_A:
 		case JE_A:
 		case JNE_A:
@@ -59,14 +52,57 @@ oc_argset_type (opcode_t oc)
 		case JOUT_A:
 		case CALL_A:
 		case OUT_A:
-			res = A;
-			break;
+			return AS_A;
 		case RET_NO:
 		case HLT_NO:
-			res = NO;
-			break;
+			return AS_NO;
 	}
-	return res;
+}
+
+
+int
+cmd_argset_type (cmdcode_t cc)
+{
+	switch (cc) {
+		case INV:
+		case INC:
+		case DEC:
+		case SIN:
+		case COS:
+		case TAN:
+		case COT:
+		case ASIN:
+		case ACOS:
+		case ATAN:
+		case ACOT:
+			return AS_R;
+		case MOV:
+		case ADD:
+		case SUB:
+		case MUL:
+		case DIV:
+			return AS_RR | AS_RC;
+		case XCHG:
+			return AS_RR;
+		case CMP:
+			return AS_RR | AS_RC | AS_CR | AS_CC;
+		case OUT:
+			return AS_R | AS_C | AS_A;
+		case JMP:
+		case JE:
+		case JNE:
+		case JGT:
+		case JGE:
+		case JLT:
+		case JLE:
+		case JIN:
+		case JOUT:
+		case CALL:
+			return AS_A;
+		case RET:
+		case HLT:
+			return AS_NO;
+	}
 }
 
 
@@ -103,7 +139,7 @@ const char *STR_CMD_OUT = "out";
 const char *STR_CMD_HLT = "hlt";
 
 const char *
-oc_cmdstr (cmdcode_t cc)
+cmd_str (cmdcode_t cc)
 {
 	switch (cc) {
 		case MOV:
@@ -171,4 +207,94 @@ oc_cmdstr (cmdcode_t cc)
 		default:
 			return NULL;
 	}
+}
+
+
+opcode_t
+cmd_to_opcode (cmdcode_t cc, argset_type ast)
+{
+	switch (cc) {
+		case MOV:
+			if (ast == AS_RR) return MOV_RR;
+			else if (ast == AS_RC)  return MOV_RC;
+			else return OPCODE_UNDEF;
+		case XCHG:
+			return (ast == AS_RR) ? XCHG_RR : OPCODE_UNDEF;
+		case ADD:
+			if (ast == AS_RR) return ADD_RR;
+			else if (ast == AS_RC)  return ADD_RC;
+			else return OPCODE_UNDEF;
+		case SUB:
+			if (ast == AS_RR) return SUB_RR;
+			else if (ast == AS_RC)  return SUB_RC;
+			else return OPCODE_UNDEF;
+		case MUL:
+			if (ast == AS_RR) return MUL_RR;
+			else if (ast == AS_RC)  return MUL_RC;
+			else return OPCODE_UNDEF;
+		case DIV:
+			if (ast == AS_RR) return DIV_RR;
+			else if (ast == AS_RC)  return DIV_RC;
+			else return OPCODE_UNDEF;
+		case INV:
+			return (ast == AS_R) ? INV_R : OPCODE_UNDEF;
+		case INC:
+			return (ast == AS_R) ? INC_R : OPCODE_UNDEF;
+		case DEC:
+			return (ast == AS_R) ? DEC_R : OPCODE_UNDEF;
+		case SIN:
+			return (ast == AS_R) ? SIN_R : OPCODE_UNDEF;
+		case COS:
+			return (ast == AS_R) ? COS_R : OPCODE_UNDEF;
+		case TAN:
+			return (ast == AS_R) ? TAN_R : OPCODE_UNDEF;
+		case COT:
+			return (ast == AS_R) ? COT_R : OPCODE_UNDEF;
+		case ASIN:
+			return (ast == AS_R) ? ASIN_R : OPCODE_UNDEF;
+		case ACOS:
+			return (ast == AS_R) ? ACOS_R : OPCODE_UNDEF;
+		case ATAN:
+			return (ast == AS_R) ? ATAN_R : OPCODE_UNDEF;
+		case ACOT:
+			return (ast == AS_R) ? ATAN_R : OPCODE_UNDEF;
+		case CMP:
+			if (ast == AS_RR)  return CMP_RR;
+			else if (ast == AS_RC)  return CMP_RC;
+			else if (ast == AS_CR)  return CMP_CR;
+			else if (ast == AS_CC)  return CMP_CC;
+			else return OPCODE_UNDEF;
+		case JMP:
+			return (ast == AS_A) ? JMP_A : OPCODE_UNDEF;
+		case JE:
+			return (ast == AS_A) ? JE_A : OPCODE_UNDEF;
+		case JNE:
+			return (ast == AS_A) ? JNE_A : OPCODE_UNDEF;
+		case JGT:
+			return (ast == AS_A) ? JGT_A : OPCODE_UNDEF;
+		case JGE:
+			return (ast == AS_A) ? JGE_A : OPCODE_UNDEF;
+		case JLT:
+			return (ast == AS_A) ? JLT_A : OPCODE_UNDEF;
+		case JLE:
+			return (ast == AS_A) ? JLE_A : OPCODE_UNDEF;
+		case JIN:
+			return (ast == AS_A) ? JIN_A : OPCODE_UNDEF;
+		case JOUT:
+			return (ast == AS_A) ? JOUT_A : OPCODE_UNDEF;
+		case CALL:
+			return (ast == AS_A) ? CALL_A : OPCODE_UNDEF;
+		case RET:
+			return (ast == AS_NO) ? RET_NO : OPCODE_UNDEF;
+		case OUT:
+			if (ast == AS_R)  return OUT_R;
+			else if (ast == AS_C)  return OUT_C;
+			else if (ast == AS_A)  return OUT_A;
+			else return OPCODE_UNDEF;
+		case HLT:
+			return (ast == AS_NO) ? HLT_NO : OPCODE_UNDEF;
+		default:
+			return OPCODE_UNDEF;
+	}
+
 }

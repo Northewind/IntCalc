@@ -7,14 +7,11 @@
 #include "addr.h"
 #include "uinter.h"
 
-char *ops[] = {"mov", "xchg",
-		"out", "hlt",
-		"add", "sub", "mul", "div", "inc", "dec", "inv",
-		"sin", "cos", "tan", "cot", "asin", "acos", "atan", "acot",
-		"jmp", "je", "jne", "jgt", "jge", "jlt", "jle", "jin", "jout",
-		"call", "ret"};
+#define ADDR_DFLT 0
+#define CMD_ERR   (-1)
 
-static int prev_addr = 0;
+
+static int prev_addr = ADDR_DFLT;
 
 
 static void
@@ -64,7 +61,7 @@ static int
 prs_label (char **str)
 {
 	int semi = prs_find (*str, ':');
-	if (semi <= 0)  return 0;
+	if (semi <= 0)  return ADDR_DFLT;
 	char labl [LABEL_SZ + 1];
 	int iend = semi - 1;
 	for (char *c = (*str)+iend;   c >= *str;   c--, iend--) {
@@ -73,11 +70,11 @@ prs_label (char **str)
 	int len = (iend+1 > LABEL_SZ) ? LABEL_SZ : iend+1;
 	memcpy (labl, *str, len);
 	labl [len] = 0;
-	// Korrektnost imeni metki
+	// Is label name correct
 	if (! prs_isid_correct (labl))  {
 		ui_sndmes (MT_ERROR, "Invalid label name");
 	}
-	// Obrezka metki ot instrukcii
+	// Cut off label from instruction
 	*str += semi;
 	while (isspace (* ++(*str)));
 	return prev_addr = -ad_hash (labl);
@@ -91,7 +88,7 @@ prs_cmd (char **str)
 	char *str_it;
 	cmdcode_t c;
 	for (c = MOV;  c <= HLT;  c++)  {
-		cmd = oc_cmdstr (c);
+		cmd = cmd_str (c);
 		str_it = *str;
 		while (*cmd == *str_it  &&  *str_it != 0) {
 			cmd++;
@@ -103,23 +100,59 @@ prs_cmd (char **str)
 			return c;
 		}
 	}
-	return -1;
+	return CMD_ERR;
 }
 
+
+static argset_type
+prs_args (char **str, argset_t *as)
+{
+	return AS_NO;
+}
+
+
+#define INSTR_NOEXEC ((instr_t) { .addr = ADDR_NOEXEC })
 
 instr_t
 parse (char *str)
 {
+	// Uncommenting
 	prs_uncomm (&str);
-	if  (*str == 0)  return (instr_t) { .addr = -1 };
-	instr_t res = { .addr = prs_label (&str) };
-	if  (*str == 0)  return (instr_t) { .addr = -1 };
+	if (*str == 0)  return INSTR_NOEXEC;
+	// Parsing the label
+	int addr = prs_label (&str);
+	if (addr == ADDR_DFLT)
+		addr = prev_addr;
+	else
+		prev_addr = addr;
+	if (*str == 0)  return INSTR_NOEXEC;
+	// Parsing the command
  	cmdcode_t cmd = prs_cmd (&str);
-
-	printf ("addr: %d   cmd: %s   tail: %s\n",
-		res.addr, oc_cmdstr (cmd), str);
-	if (cmd == HLT)  exit (0);
-
-	return res;
+	if (cmd == CMD_ERR)  {
+		ui_sndmes (MT_ERROR, "Unknown command");
+		return INSTR_NOEXEC;
+	}
+	prev_addr = ADDR_DFLT;
+	if (*str == 0) {
+		if (cmd_argset_type (cmd) & AS_NO) {
+			return (instr_t) { .addr=addr,
+					   .opcode=cmd_to_opcode (cmd, AS_NO) };
+		}
+		else {
+			ui_sndmes (MT_ERROR, "No arguments for command");
+			return INSTR_NOEXEC;
+		}
+	}
+	else {
+		if (cmd_argset_type (cmd) & AS_NO) {
+			ui_sndmes (MT_WARN, "Surplus arguments after command");
+			return (instr_t) { .addr=addr,
+					   .opcode=cmd_to_opcode (cmd, AS_NO) };
+		}
+	}
+	// Parsing the args
+	argset_t as;
+	argset_type ast = prs_args (&str, &as);
+	return INSTR_NOEXEC;
 }
 
