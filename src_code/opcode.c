@@ -37,8 +37,6 @@ oc_argset_type (opcode_t oc)
 			return AS_RC;
 		case CMP_CC:
 			return AS_CC;
-		case OUT_C:
-			return AS_C;
 		case CMP_CR:
 			return AS_CR;
 		case JMP_A:
@@ -51,9 +49,11 @@ oc_argset_type (opcode_t oc)
 		case JIN_A:
 		case JOUT_A:
 		case CALL_A:
-		case OUT_A:
 			return AS_A;
+		case OUT_S:
+			return AS_S;
 		case RET_NO:
+		case FREE_NO:
 		case HLT_NO:
 			return AS_NO;
 	}
@@ -87,7 +87,7 @@ cmd_argset_type (cmdcode_t cc)
 		case CMP:
 			return AS_RR | AS_RC | AS_CR | AS_CC;
 		case OUT:
-			return AS_R | AS_C | AS_A;
+			return AS_R | AS_S;
 		case JMP:
 		case JE:
 		case JNE:
@@ -100,6 +100,7 @@ cmd_argset_type (cmdcode_t cc)
 		case CALL:
 			return AS_A;
 		case RET:
+		case FREE:
 		case HLT:
 			return AS_NO;
 	}
@@ -136,6 +137,7 @@ const char *STR_CMD_JOUT = "jout";
 const char *STR_CMD_CALL = "call";
 const char *STR_CMD_RET = "ret";
 const char *STR_CMD_OUT = "out";
+const char *STR_CMD_FREE = "free";
 const char *STR_CMD_HLT = "hlt";
 
 const char *
@@ -202,6 +204,8 @@ cmd_str (cmdcode_t cc)
 			return STR_CMD_RET;
 		case OUT:
 			return STR_CMD_OUT;
+		case FREE:
+			return STR_CMD_FREE;
 		case HLT:
 			return STR_CMD_HLT;
 		default:
@@ -288,9 +292,10 @@ cmd_to_opcode (cmdcode_t cc, argset_type ast)
 			return (ast == AS_NO) ? RET_NO : OPCODE_UNDEF;
 		case OUT:
 			if (ast == AS_R)  return OUT_R;
-			else if (ast == AS_C)  return OUT_C;
-			else if (ast == AS_A)  return OUT_A;
+			else if (ast == AS_S)  return OUT_S;
 			else return OPCODE_UNDEF;
+		case FREE:
+			return (ast == AS_NO) ? FREE_NO : OPCODE_UNDEF;
 		case HLT:
 			return (ast == AS_NO) ? HLT_NO : OPCODE_UNDEF;
 		default:

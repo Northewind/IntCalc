@@ -3,6 +3,7 @@
 
 #include "opcode.h"
 
+
 typedef struct {
 	int addr;
 	opcode_t opcode;

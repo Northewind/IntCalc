@@ -47,11 +47,18 @@ out (dint_t *i)
 
 
 static void
-hlt () {
+free_ ()
+{
 	ad_freeall ();
 	in_freeall ();
 	ot_freeall ();
 	var_freeall ();
+}
+
+
+static void
+hlt () {
+	free_ ();
 	exit (0);
 }
 
@@ -60,7 +67,7 @@ static void
 execu (instr_t i)
 {
 	srch_addr = -1;
-	int a;
+	int a, s;
 	dint_t c, c1, c2, *r, *r1, *r2;
 	switch (oc_argset_type (i.opcode)) {
 		case AS_R:
@@ -78,8 +85,8 @@ execu (instr_t i)
 			c1 = i.args.as_cc.c1;
 			c2 = i.args.as_cc.c2;
 			break;
-		case AS_C:
-			c = i.args.as_c.c;
+		case AS_S:
+			s = i.args.as_s.s;
 			break;
 		case AS_CR:
 			c = i.args.as_cr.c;
@@ -88,7 +95,7 @@ execu (instr_t i)
 		case AS_A:
 			a = i.args.as_a.a;
 			break;
-		case AS_NO:
+		default:
 			break;
 	}
 	switch (i.opcode) {
@@ -203,14 +210,14 @@ execu (instr_t i)
 		case RET_NO:
 			ret ();
 			break;
-		case OUT_A:
-			ui_sndmes (MT_RSLT, ot_gettxt (a));
+		case OUT_S:
+			ui_sndmes (MT_RSLT, ot_gettxt (s));
 			break;
 		case OUT_R:
 			out (r);
 			break;
-		case OUT_C:
-			out (&c);
+		case FREE_NO:
+			free_ ();
 			break;
 		case HLT_NO:
 			hlt ();

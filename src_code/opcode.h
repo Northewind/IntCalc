@@ -22,8 +22,8 @@ typedef enum {
 	JLT_A,   JLE_A,
 	JIN_A,   JOUT_A,
 	CALL_A,  RET_NO,
-	OUT_A,   OUT_R,   OUT_C,
-	HLT_NO
+	OUT_S,   OUT_R,
+	FREE_NO, HLT_NO
 } opcode_t;
 
 
@@ -47,8 +47,8 @@ typedef struct {
 } argset_cc_t;
 
 typedef struct {
-        dint_t c;
-} argset_c_t;
+        int s;
+} argset_s_t;
 
 typedef struct {
         dint_t c;
@@ -62,7 +62,7 @@ typedef struct {
 
 typedef union {
 	argset_r_t   as_r;
-	argset_c_t   as_c;
+	argset_s_t   as_s;
 	argset_a_t   as_a;
 	argset_rr_t  as_rr;
 	argset_rc_t  as_rc;
@@ -72,8 +72,9 @@ typedef union {
 
 
 typedef enum {
+	AS_ERROR = 0,
 	AS_R = 1,  AS_RR = 2,  AS_RC = 4,  AS_CC = 8,
-	AS_C = 16, AS_CR = 32, AS_A = 64,  AS_NO = 128
+	AS_S = 16, AS_CR = 32, AS_A = 64,  AS_NO = 128
 } argset_type;
 
 
@@ -81,7 +82,7 @@ typedef enum {
 	MOV,  XCHG, ADD, SUB, MUL,  DIV,  INV,  INC,  DEC,
 	SIN,  COS,  TAN, COT, ASIN, ACOS, ATAN, ACOT,
 	CMP,  JMP,  JE,  JNE, JGT,  JGE,  JLT,  JLE,  JIN, JOUT,
-	CALL, RET,  OUT, HLT
+	CALL, RET,  OUT, FREE, HLT
 } cmdcode_t;
 
 

@@ -51,6 +51,7 @@ ot_freeall ()
 	while (txt) {
 		rmv = txt;
 		txt = txt -> next;
+		free (rmv -> text);
 		free (rmv);
 	}
 	txt = txt_end = NULL;

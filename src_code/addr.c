@@ -56,3 +56,21 @@ ad_hash (char *str)
 	}
 	return hash;
 }
+
+
+int 
+ad_hash_subs (char *start, char *end)
+{
+        if (start > end)  return ad_hash ("");
+        if (*end == 0)    return ad_hash (start);
+        if (start == end)  {
+                char s [] = { *end, 0 };
+                return ad_hash (s);
+        }   
+        char tmp = *end;
+	char zero = 0;
+	*end = 0;
+        int res = ad_hash (start);
+        *end = tmp;
+        return res;
+}

@@ -1,6 +1,6 @@
 SRC_PATH=src_code
 BIN_PATH=bin
-OPT= -std=c99  -lm  $(SRC_PATH)/*.c
+OPT= -g -std=c99  -lm  $(SRC_PATH)/*.c
 OUTF=intcalc
 TEST=cat tests
 

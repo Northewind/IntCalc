@@ -342,7 +342,10 @@ char *
 i_asstr (const dint_t *s)
 {
 	char *res = malloc (STR_SZ);
-	snprintf (res, STR_SZ, "%.3Lf %.3Lf", s -> low, s -> upp);
+	if (s -> low  ==  s -> upp)
+		snprintf (res, STR_SZ, "%.3Lf", s -> low);
+	else
+		snprintf (res, STR_SZ, "%.3Lf %.3Lf", s -> low, s -> upp);
 	return res;
 }
 #undef STR_SZ
