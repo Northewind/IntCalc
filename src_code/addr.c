@@ -24,7 +24,7 @@ ad_push (int addr)
 int
 ad_pop ()
 {
-	if (! adstack)  return -1;
+	if (! adstack)  return AD_EMPTY_STACK;
         int res = adstack -> addr;
         ad_stack_t rmv = adstack;
 	adstack = adstack -> prev;

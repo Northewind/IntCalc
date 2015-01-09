@@ -71,6 +71,14 @@ in_set (int addr)
 }
 
 
+void
+in_set_after (int addr)
+{
+	in_pnt = in_srch (addr);
+	in_pnt = in_pnt -> next;
+}
+
+
 instr_t *
 in_getplay ()
 {

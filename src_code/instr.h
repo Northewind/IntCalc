@@ -20,6 +20,9 @@ in_put (instr_t i);
 void
 in_set (int addr);
 
+void
+in_set_after (int addr);
+
 instr_t *
 in_getplay ();
 

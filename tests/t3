@@ -1,56 +1,81 @@
 ;Testing of
 ;1. Comparing operations
-;2. Forward unconditional jumping
+;2. Procedure calls
+;3. Forward unconditional jumping
 
 test1:	mov r1, 10 12
 	mov r2, 12 10.0
 	cmp r1, r2
 	je equal
 	jmp badans
-equal:	out "good1";call ogood
+equal:	call ogood
 test2:	mov r1, 10 12
 	mov r2, 16 18
 	cmp r1, r2
 	jne noteq
 	jmp badans
-noteq:	out "good2";call ogood
+noteq:	call ogood
 test3:	mov r1, 10 12
 	mov r2, 5 9
 	cmp r1, r2
 	jgt great
 	jmp badans
-great:	;out "good3";call ogood
+great:	call ogood
 test4:	mov r1, 10 12
 	mov r2, 5 11
 	cmp r1, r2
 	jge gequal
 	jmp badans
-gequal:	;out "good4";call ogood
+gequal:	call ogood
 test5:	mov r1, 10 12
 	mov r2, 16 18
 	cmp r1, r2
 	jlt lesse
 	jmp badans
-lesse:	;out "good5";call ogood
+lesse:	call ogood
 test6:	mov r1, 10 12
 	mov r2, 11 18
 	cmp r1, r2
 	jle lequal
 	jmp badans
-lequal:	;out "good6";call ogood
+lequal:	call ogood
 test7:  mov r1, 10 12
 	mov r2, 5 20
 	cmp r1, r2
 	jin insid
 	jmp badans
-insid:	;out "good7";call ogood
+insid:	call ogood
 test8:  mov r1, 10 12
 	mov r2, 11.
 	cmp r1, r2
 	jout outsi
 	jmp badans
-outsi:	;out "good8";call ogood
+outsi:	call ogood
 	out "All tests passed"
 	jmp exit
-badans:	out "Bad..." ;call obad
+badans:	call obad
 exit:	hlt
+
+
+;Procedures
+;==========
+
+ohead:	out "Test #"
+	inc r3
+	out r3
+	out "Comparing of:"
+	out "r1 ="
+	out r1
+	out "r2 ="
+	out r2
+	ret
+
+ogood:	call ohead
+	out "Good!"
+	out ""
+	ret
+
+obad:	call ohead
+	out "Bad..."
+	out ""
+	ret

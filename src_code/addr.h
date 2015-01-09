@@ -1,6 +1,8 @@
 #ifndef ADDR_H
 #define ADDR_H
 
+#define AD_EMPTY_STACK  (-1)
+
 void
 ad_push (int addr);
 

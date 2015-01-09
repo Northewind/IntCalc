@@ -22,7 +22,7 @@ typedef enum {
 	JIN_A,   JOUT_A,
 	CALL_A,  RET_NO,
 	OUT_S,   OUT_R,
-	FREE_NO, HLT_NO
+	NOP_NO,  FREE_NO, HLT_NO
 } opcode_t;
 
 
@@ -82,7 +82,7 @@ typedef enum {
 	MOV,  XCHG, ADD, SUB, MUL,  DIV,  INV,  INC,  DEC,
 	SIN,  COS,  TAN, COT, ASIN, ACOS, ATAN, ACOT,
 	CMP,  JMP,  JE,  JNE, JGT,  JGE,  JLT,  JLE,  JIN, JOUT,
-	CALL, RET,  OUT, FREE, HLT
+	CALL, RET,  OUT, NOP, FREE, HLT
 } cmdcode_t;
 
 

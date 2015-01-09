@@ -5,9 +5,10 @@
 #include "outxt.h"
 #include "uinter.h"
 
+#define ADDR_NOSPEC  (-1)
 
 static cmp_status_t cmp_reg = CMP_UNK;
-static int srch_addr = -1;
+static int srch_addr = ADDR_NOSPEC;
 
 
 static void
@@ -29,10 +30,10 @@ static void
 ret ()
 {
 	int retaddr = ad_pop ();
-	if (retaddr == -1) {
+	if (retaddr == AD_EMPTY_STACK) {
 		ui_sndmes (MT_ERROR, "RET found, but CALL was not present");
 	}
-	jmp (retaddr);
+	in_set_after (retaddr);
 }
 
 
@@ -65,7 +66,7 @@ hlt () {
 static void
 execu (instr_t i)
 {
-	srch_addr = -1;
+	srch_addr = ADDR_NOSPEC;
 	int a, s;
 	dint_t c, c1, c2, *r, *r1, *r2;
 	switch (oc_argset_type (i.opcode)) {
@@ -218,6 +219,8 @@ execu (instr_t i)
 		case OUT_R:
 			out (r);
 			break;
+		case NOP_NO:
+			break;
 		case FREE_NO:
 			free_ ();
 			break;
@@ -234,7 +237,7 @@ void
 proc (instr_t i)
 {
 	in_put (i);
-	if (srch_addr == -1  ||  srch_addr == i.addr) {
+	if (srch_addr == ADDR_NOSPEC  ||  srch_addr == i.addr) {
 		instr_t *ipnt;
 		while ((ipnt = in_getplay ())) {
 			execu (*ipnt);
