@@ -4,7 +4,7 @@ OPT= -g -std=c99  -lm  $(SRC_PATH)/*.c
 OUTF=intcalc
 TEST=cat tests
 
-all: clean build run
+all: build run
 
 build:
 	gcc $(OPT) -o $(BIN_PATH)/$(OUTF)_gcc
@@ -14,9 +14,17 @@ run:
 	$(BIN_PATH)/$(OUTF)_gcc
 	#$(BIN_PATH)/$(OUTF)_cl
 
+
+
 t1:
 	$(TEST)/t1 | $(BIN_PATH)/$(OUTF)_gcc
 	#$(TEST)/t1 | $(BIN_PATH)/$(OUTF)_cl
+
+t2:
+	$(TEST)/t2 | $(BIN_PATH)/$(OUTF)_gcc
+	#$(TEST)/t2 | $(BIN_PATH)/$(OUTF)_cl
+
+
 
 dbox: build clean
 	rm -R ~/Public/Dropbox/workspace/intcalc/* 

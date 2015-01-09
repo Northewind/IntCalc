@@ -10,7 +10,6 @@
 
 #define ADDR_DFLT 0
 #define INSTR_NOEXEC  ((instr_t) { .addr = ADDR_NOEXEC })
-#define CMD_ERR   (-1)
 
 static int prev_addr = ADDR_DFLT;
 
@@ -88,7 +87,7 @@ prs_label (char **str)
 	// Cut off label from instruction
 	*str += semi;
 	while (isspace (* ++(*str)));
-	return prev_addr = -ad_hash (labl);
+	return prev_addr = ad_hash (labl);
 }
 
 
@@ -111,7 +110,7 @@ prs_cmd (char **str)
 			return c;
 		}
 	}
-	return CMD_ERR;
+	return CMD_ERROR;
 }
 
 
@@ -130,7 +129,7 @@ prs_arg_r (char **str, int *val)
 		char *beg = ++*str;
 		while (isdigit (**str))  ++*str;
 		if (prs_idchar (**str)) {
-			// Label, starting with R
+			// Label, starting with 'r'
 			while (prs_idchar (**str))  ++*str;
 			if (prs_argend (**str))  {
 				*val = ad_hash_subs (beg, *str);
@@ -151,7 +150,7 @@ prs_arg_r (char **str, int *val)
 
 
 static argtype_t
-prs_arg_str (char **str, int *addr)
+prs_arg_txt (char **str, int *addr)
 {
 	if (**str != '"')  return AT_UNDEF;
 	char *beg = *str;
@@ -183,11 +182,43 @@ prs_arg_a (char **str, int *addr)
 }
 
 
-static argtype_t
-prs_arg_num (char **str, dint_t *val)
+static double
+prs_arg_num (char **str)
 {
+	char *nstr = *str;
+	if (**str == '-'  ||  **str == '+')  ++*str;
+	if (! isdigit (**str))  return 0.0/0.0;
+	while (isdigit (*++*str));
+	if (**str == '.')  ++*str;
 	while (isdigit (**str))  ++*str;
-	*val = (dint_t) { .low = 0, .upp = 1 };
+	if (isspace (**str)  ||  **str == 0) {
+		char tmp = **str;
+		**str = 0;
+		double num = atof (nstr);
+		**str = tmp;
+		while (isspace (**str))  ++*str;
+		return num;
+	}
+	return 0.0/0.0;
+}
+
+
+static argtype_t
+prs_arg_dint (char **str, dint_t *val)
+{
+	double n1 = prs_arg_num (str);
+	if (n1 != n1)  return AT_UNDEF;
+	double n2 = prs_arg_num (str);
+	if (n2 != n2) {
+		*val = i_crt (n1);
+		return AT_C;
+	}
+	double n3 = prs_arg_num (str);
+	if (n3 != n3) {
+		*val = i_crt2 (n1, n2);
+		return AT_C;
+	}
+	*val = i_crt3 (n1, n2, n3);
 	return AT_C;
 }
 
@@ -197,9 +228,9 @@ prs_arg (char **str, void *val)
 {
 	argtype_t at;
 	if (**str == 'r')  at = prs_arg_r (str, val);
-	else if (**str == '"')  at = prs_arg_str (str, val);
+	else if (**str == '"')  at = prs_arg_txt (str, val);
 	else if (isalpha (**str))  at = prs_arg_a (str, val);
-	else if (isdigit (**str))  at = prs_arg_num (str, val);
+	else if (isdigit (**str))  at = prs_arg_dint (str, val);
 	else at = AT_UNDEF;
 	while (isspace (**str))  ++*str;
 	return at;
@@ -215,15 +246,16 @@ prs_args (char **str, argset_t *as)
 	if (**str == 0) {
 		switch (at1) {
 			case AT_R:
-				as -> as_r.r = (int) *val1;
+				memcpy (&(as -> as_r.r), val1, sizeof (int));
 				return AS_R;
 			case AT_A:
-				as -> as_a.a = (int) *val1;
+				memcpy (&(as -> as_a.a), val1, sizeof (int));
 				return AS_A;
 			case AT_S:
-				as -> as_s.s = (int) *val1;
+				memcpy (&(as -> as_s.s), val1, sizeof (int));
 				return AS_S;
-			default:
+			case AT_C:
+			case AT_UNDEF:
 				return AS_ERROR;
 		}
 	}
@@ -245,7 +277,9 @@ prs_args (char **str, argset_t *as)
 					memcpy (&(as -> as_rc.r), val1, sizeof (int));
 					memcpy (&(as -> as_rc.c), val2, sizeof (dint_t));
 					return AS_RC;
-				default:
+				case AT_A:
+				case AT_S:
+				case AT_UNDEF:
 					return AS_ERROR;
 			}
 		case AT_C:
@@ -258,10 +292,14 @@ prs_args (char **str, argset_t *as)
 					memcpy (&(as -> as_cc.c1), val1, sizeof (dint_t));
 					memcpy (&(as -> as_cc.c2), val2, sizeof (dint_t));
 					return AS_CC;
-				default:
+				case AT_A:
+				case AT_S:
+				case AT_UNDEF:
 					return AS_ERROR;
 			}
-		default:
+		case AT_A:
+		case AT_S:
+		case AT_UNDEF:
 			return AS_ERROR;
 	}
 }
@@ -282,7 +320,7 @@ parse (char *str)
 	if (*str == 0)  return INSTR_NOEXEC;
 	// Parsing the command
  	cmdcode_t cmd = prs_cmd (&str);
-	if (cmd == CMD_ERR)  {
+	if (cmd == CMD_ERROR)  {
 		ui_sndmes (MT_ERROR, "Unknown command");
 		return INSTR_NOEXEC;
 	}
@@ -308,37 +346,12 @@ parse (char *str)
 		ui_sndmes (MT_ERROR, "Invalid arguments");
 		return INSTR_NOEXEC;
 	}
+	opcode_t opcode = cmd_to_opcode (cmd, ast);
+	if (opcode == OPCODE_ERROR)  {
+		ui_sndmes (MT_ERROR, "Invalid arguments");
+		return INSTR_NOEXEC;
+	}
 	return (instr_t) { .addr = addr,
-			   .opcode = cmd_to_opcode (cmd, ast),
+			   .opcode = opcode,
 			   .args = as };
 }
-
-
-//#define DEBUG_PARS
-#ifdef DEBUG_PARS
-int
-main ()
-{
-	char s1 [] = "RAS  , R3";
-	char *s = s1;
-	printf ("init str: %s\n", s);
-	int val;
-	argtype_t at = prs_arg_r (&s, &val);
-	if (at == AT_A) {
-		printf ("init str hash: %d\n", ad_hash (s));
-		printf ("hash after parsing: %d\n", val);
-		printf ("arg type: AT_A\n");
-		printf ("str rest: %s\n", s);
-	}
-	if (at == AT_R) {
-		printf ("arg type: AT_R\n");
-		printf ("reg num:  %d\n", val);
-		printf ("str rest: %s\n", s);
-	}
-
-	if (at == AT_UNDEF) {
-		printf ("arg type (%d) undefined\n", at);
-	}
-	return 0;
-}
-#endif

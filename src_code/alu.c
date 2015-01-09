@@ -6,6 +6,7 @@
 #include "uinter.h"
 
 #define M_PIl          3.141592653589793238462643383279502884L 
+#define COMP_ERROR     0.0000001L
 
 dint_t
 i_crt  (long double nom)
@@ -76,9 +77,8 @@ i_add (dint_t *i1, const dint_t *i2)
 dint_t *
 i_sub (dint_t *i1, const dint_t *i2)
 {
-	long double low = i1 -> low;
 	i1 -> low -= i2 -> upp;
-	i1 -> upp -= low;
+	i1 -> upp -= i2 -> low;
 	return i1;
 }
 
@@ -88,11 +88,9 @@ array_min_max (int count, const long double arr[])
 {
 	dint_t res = { .low = arr[0],   .upp = arr[0] };
 	for (int i = 1;  i < count;  i++) {
-		if (res.low > arr[i]) {
+		if (arr[i] < res.low) 
 			res.low = arr[i];
-			continue;
-		}
-		if (res.upp < arr[i])
+		else if (arr[i] > res.upp)
 			res.upp = arr[i];
 	}
 	return res;
@@ -172,7 +170,7 @@ i_neg (dint_t *s)
 }
 
 
-// Find minimum of function in interval using bisection method
+// Find minimum of function f in interval s using bisection method
 static long double
 arg_min (long double (*f)(long double), const dint_t *s, long double error)
 {
@@ -222,8 +220,8 @@ sind_neg (long double x)
 dint_t *
 i_sin (dint_t *s)
 {
-	long double low = sind (arg_min (&sind, s, 0.000001L));
-	long double upp = sind (arg_min (&sind_neg, s, 0.000001L));
+	long double low = sind (arg_min (&sind, s, COMP_ERROR));
+	long double upp = sind (arg_min (&sind_neg, s, COMP_ERROR));
 	s -> low = low;
 	s -> upp = upp;
 	return s;
@@ -279,15 +277,15 @@ asind_neg (long double x)
 dint_t *
 i_asin (dint_t *s)
 {
-	long double low = asind (arg_min (&asind, s, 0.000001L));
-	long double upp = asind (arg_min (&asind_neg, s, 0.000001L));
+	long double low = asind (arg_min (&asind, s, COMP_ERROR));
+	long double upp = asind (arg_min (&asind_neg, s, COMP_ERROR));
 	s -> low = low;
 	s -> upp = upp;
 	return s;
 }
 
 
-// acos = 2 * asin (sqrt ((1 - x) / 2))
+// acos x = 2 * asin (sqrt ((1 - x) / 2))
 dint_t *
 i_acos (dint_t *s)
 {
@@ -318,15 +316,15 @@ atand_neg (long double x)
 dint_t *
 i_atan (dint_t *s)
 {
-	long double low = atand (arg_min (&atand, s, 0.000001L));
-	long double upp = atand (arg_min (&atand_neg, s, 0.000001L));
+	long double low = atand (arg_min (&atand, s, COMP_ERROR));
+	long double upp = atand (arg_min (&atand_neg, s, COMP_ERROR));
 	s -> low = low;
 	s -> upp = upp;
 	return s;
 }
 
 
-// acot = atan (1 / x)
+// acot x = atan (1 / x)
 dint_t *
 i_acot (dint_t *s)
 {
@@ -345,7 +343,7 @@ i_asstr (const dint_t *s)
 	if (s -> low  ==  s -> upp)
 		snprintf (res, STR_SZ, "%.3Lf", s -> low);
 	else
-		snprintf (res, STR_SZ, "%.3Lf %.3Lf", s -> low, s -> upp);
+		snprintf (res, STR_SZ, "%.3Lf  %.3Lf", s -> low, s -> upp);
 	return res;
 }
 #undef STR_SZ

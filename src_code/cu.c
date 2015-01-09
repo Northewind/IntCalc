@@ -41,7 +41,6 @@ out (dint_t *i)
 {
 	char *str = i_asstr (i);
 	ui_sndmes (MT_RSLT, str);
-	ui_sndmes (MT_RSLT, "\n");
 	free (str);
 }
 
@@ -95,8 +94,11 @@ execu (instr_t i)
 		case AS_A:
 			a = i.args.as_a.a;
 			break;
-		default:
+		case AS_NO:
 			break;
+		case AS_ERROR:
+			ui_sndmes (MT_ERROR, "Unknown argset");
+			return;
 	}
 	switch (i.opcode) {
 		case MOV_RC:
@@ -221,6 +223,8 @@ execu (instr_t i)
 			break;
 		case HLT_NO:
 			hlt ();
+			break;
+		case OPCODE_ERROR:
 			break;
 	}
 }

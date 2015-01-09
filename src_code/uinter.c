@@ -14,7 +14,8 @@ ui_sndmes (msg_t type, char *mes)
 			fprintf (stderr, "Warning: %s\n", mes);
 			break;
 		case MT_RSLT:
-			printf ("%s", mes);
+			printf ("%s\n", mes);
+			//fflush (stdout);
 			break;
 		case MT_INFO:
 			printf ("%s", mes);

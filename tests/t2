@@ -1,0 +1,34 @@
+	mov r1, 10 12
+	mov r2, 12 10.0
+	cmp r1, r2
+	je equal
+	jmp badans
+equal:	call ogood
+
+
+
+
+	out "All tests passed"
+	hlt
+badans:	call obad
+	hlt
+
+
+
+;Procedures
+;==========
+
+ohead:	out "Comparing of:"
+	out "r1 ="
+	out r1
+	out "r2 ="
+	out r2
+	ret
+
+ogood:	call ohead
+	out "Good!"
+	ret
+
+obad:	call ohead
+	out "Bad..."
+	ret

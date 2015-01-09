@@ -70,7 +70,7 @@ ad_hash_subs (char *start, char *end)
         char tmp = *end;
 	char zero = 0;
 	*end = 0;
-        int res = ad_hash (start);
+        int hash = ad_hash (start);
         *end = tmp;
-        return res;
+        return hash;
 }

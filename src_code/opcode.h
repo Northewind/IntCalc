@@ -3,9 +3,8 @@
 
 #include "alu.h"
 
-#define OPCODE_UNDEF (-1)
-
 typedef enum {
+	OPCODE_ERROR = -1,
 	MOV_RC,  MOV_RR,  XCHG_RR,
 	ADD_RC,  ADD_RR,
 	SUB_RC,  SUB_RR,
@@ -79,6 +78,7 @@ typedef enum {
 
 
 typedef enum {
+	CMD_ERROR = -1,
 	MOV,  XCHG, ADD, SUB, MUL,  DIV,  INV,  INC,  DEC,
 	SIN,  COS,  TAN, COT, ASIN, ACOS, ATAN, ACOT,
 	CMP,  JMP,  JE,  JNE, JGT,  JGE,  JLT,  JLE,  JIN, JOUT,
