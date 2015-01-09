@@ -8,10 +8,8 @@
 #include "uinter.h"
 #include "outxt.h"
 
-#define ADDR_DFLT 0
 #define INSTR_NOEXEC  ((instr_t) { .addr = ADDR_NOEXEC })
 
-static int prev_addr = ADDR_DFLT;
 
 typedef enum {
 	AT_R, AT_C, AT_A, AT_S, AT_UNDEF
@@ -71,23 +69,22 @@ static int
 prs_label (char **str)
 {
 	int semi = prs_find (*str, ':');
-	if (semi <= 0)  return ADDR_DFLT;
-	char labl [LABEL_SZ + 1];
-	int iend = semi - 1;
-	for (char *c = (*str)+iend;   c >= *str;   c--, iend--) {
-		if (! isspace (*c))  break;
-	}
-	int len = (iend+1 > LABEL_SZ) ? LABEL_SZ : iend+1;
-	memcpy (labl, *str, len);
-	labl [len] = 0;
+	if (semi <= 0)  return ad_getnew ();
+	char *beg = *str;
+	char *end = beg + semi;
+	while (isspace (*--end));
+	*++end = 0;
 	// Is label name correct
-	if (! prs_isid_correct (labl))  {
+	if (! prs_isid_correct (beg))  {
 		ui_sndmes (MT_ERROR, "Invalid label name");
+	}
+	if (end - beg  >  LABEL_SZ)  {
+		ui_sndmes (MT_WARN, "Label name too long");
 	}
 	// Cut off label from instruction
 	*str += semi;
-	while (isspace (* ++(*str)));
-	return prev_addr = ad_hash (labl);
+	while (isspace (*++*str));
+	return ad_hash (beg);
 }
 
 
@@ -240,6 +237,7 @@ prs_arg (char **str, void *val)
 static argset_type
 prs_args (char **str, argset_t *as)
 {
+	if (**str == 0)  return AS_NO;
 	// First arg
 	char val1 [sizeof (dint_t)];
 	argtype_t at1 = prs_arg (str, val1);
@@ -308,23 +306,18 @@ prs_args (char **str, argset_t *as)
 instr_t
 parse (char *str)
 {
-	// Uncommenting
+	// Uncommenting and label parsing
 	prs_uncomm (&str);
 	if (*str == 0)  return INSTR_NOEXEC;
-	// Parsing the label
 	int addr = prs_label (&str);
-	if (addr == ADDR_DFLT)
-		addr = prev_addr;
-	else
-		prev_addr = addr;
-	if (*str == 0)  return INSTR_NOEXEC;
+	if (*str == 0)  return (instr_t) { .addr = addr,
+					   .opcode = NOP_NO };
 	// Parsing the command
  	cmdcode_t cmd = prs_cmd (&str);
 	if (cmd == CMD_ERROR)  {
 		ui_sndmes (MT_ERROR, "Unknown command");
 		return INSTR_NOEXEC;
 	}
-	prev_addr = ADDR_DFLT;
 	if (*str == 0) {
 		if (cmd_argset_type (cmd) & AS_NO)
 			return (instr_t) { .addr = addr,

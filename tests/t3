@@ -11,7 +11,7 @@ test1:	mov r1, 10 12
 equal:	call ogood
 test2:	mov r1, 10 12
 	mov r2, 16 18
-	cmp r1, r2
+	cmp r1, r2 
 	jne noteq
 	jmp badans
 noteq:	call ogood

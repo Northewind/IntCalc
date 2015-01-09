@@ -52,8 +52,9 @@ ad_hash (char *str)
 	int hash = 0;
 	int pow = 1;
 	for (char *c = str;  *c;  c++) {
-		hash += ((int) *c - 29) * (pow *= 31) / 31;
+		hash -= ((int) *c - 29) * (pow *= 31) / 31;
 	}
+	if (hash > 0)  hash = -hash;
 	return hash;
 }
 
@@ -73,4 +74,12 @@ ad_hash_subs (char *start, char *end)
         int hash = ad_hash (start);
         *end = tmp;
         return hash;
+}
+
+
+int
+ad_getnew ()
+{
+	static int cur = 10;
+	return cur++;
 }

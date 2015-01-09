@@ -18,4 +18,8 @@ ad_hash (char *str);
 int
 ad_hash_subs (char *start, char *end);
 
+// Address counter - generate unique address
+int
+ad_getnew ();
+
 #endif // ! ADDR_H
