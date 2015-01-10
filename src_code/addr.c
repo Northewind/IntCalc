@@ -64,12 +64,8 @@ ad_hash_subs (char *start, char *end)
 {
         if (start > end)  return ad_hash ("");
         if (*end == 0)    return ad_hash (start);
-        if (start == end)  {
-                char s [] = { *end, 0 };
-                return ad_hash (s);
-        }   
+        if (start == end) return ad_hash ((char []) { *end, 0 });
         char tmp = *end;
-	char zero = 0;
 	*end = 0;
         int hash = ad_hash (start);
         *end = tmp;

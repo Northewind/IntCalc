@@ -30,10 +30,10 @@ static void
 ret ()
 {
 	int retaddr = ad_pop ();
-	if (retaddr == AD_EMPTY_STACK) {
+	if (retaddr == AD_EMPTY_STACK)
 		ui_sndmes (MT_ERROR, "RET found, but CALL was not present");
-	}
-	in_set_after (retaddr);
+	else
+		in_set_after (retaddr);
 }
 
 

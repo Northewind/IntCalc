@@ -1,0 +1,75 @@
+;Trigonometric test
+
+start:	mov r10, 0.6 0.8
+test1:	out "Test:  sin^2 + cos^2 = 1"
+	call setargs
+	sin r1
+	mul r1, r1
+	cos r2
+	mul r2, r2
+	add r1, r2
+	dec r1
+	call rslt_show
+test2:	out "Test:  tg^2 + 1 = 1 / cos^2"
+	call setargs
+	tan r1
+	mul r1, r1
+	inc r1
+	cos r2
+	mul r2, r2
+	inv r2
+	sub r1, r2
+	call rslt_show
+test3:	out "Test:  ctg^2 + 1 = 1 / sin^2"
+	call setargs
+	cot r1
+	mul r1, r1
+	inc r1
+	sin r2
+	mul r2, r2
+	inv r2
+	sub r1, r2
+	call rslt_show
+test4:  out "Test:  tg * ctg = 1"
+	call setargs
+	tan r1
+	cot r2
+	mul r1, r2
+	dec r1
+	call rslt_show
+test5:	out "Test:  arcsin + arccos = Pi/2"
+	call setargs
+	asin r1
+	acos r2
+	add r1, r2
+	sub r1, 90
+	call rslt_show
+test6:	out "Test:  arctg + arcctg = Pi/2"
+	call setargs
+	atan r1
+	acot r2
+	add r1, r2
+	sub r1, 90
+	call rslt_show
+	hlt
+
+
+;Procedures
+;==========
+
+;Set up arg values
+;input:  r10 - value to set up
+;output: r1, r2
+setargs:
+	mov r1, r10
+	mov r2, r10
+	ret
+
+
+;Print the result
+;input:  r1
+rslt_show:
+	out "Result (should be zero):"
+	out r1
+	out ""
+	ret
