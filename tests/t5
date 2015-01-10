@@ -1,6 +1,9 @@
 ;Trigonometric test
 
-start:	mov r10, 0.6 0.8
+start:	mov r10, 0.7
+	out "Testing for interval"
+	out r10
+	out ""
 test1:	out "Test:  sin^2 + cos^2 = 1"
 	call setargs
 	sin r1

@@ -6,7 +6,7 @@
 #include "uinter.h"
 
 #define M_PIl          3.141592653589793238462643383279502884L 
-#define COMP_ERROR     0.0000001L
+#define COMP_ERROR     0.000000001L
 
 dint_t
 i_crt  (long double nom)
@@ -17,8 +17,12 @@ i_crt  (long double nom)
 dint_t
 i_crt2 (long double lim1, long double lim2)
 {
-	return (dint_t) { .low = fmin (lim1, lim2),
-			  .upp = fmax (lim1, lim2)  };
+	if (lim1 > lim2) {
+		long double tmp = lim1;
+		lim1 = lim2;
+		lim2 = tmp;
+	}
+	return (dint_t) { .low = lim1,  .upp = lim2 };
 }
 
 
@@ -53,14 +57,19 @@ i_cmp (const dint_t *i1, const dint_t *i2)
 	if (i1 -> low >= i2 -> upp)
 			return CMP_GT | CMP_NE;
 	if (i1 -> low >= i2 -> low
-		&& i1 -> upp >= i2 -> upp) return CMP_GE;
-	if (i1 -> upp <= i2 -> low) 	   return CMP_LT | CMP_NE;
+		&& i1 -> upp >= i2 -> upp)
+			return CMP_GE;
+	if (i1 -> upp <= i2 -> low)
+			return CMP_LT | CMP_NE;
 	if (i1 -> low <= i2 -> low
-		&& i1 -> upp <= i2 -> upp) return CMP_LE;
+		&& i1 -> upp <= i2 -> upp)
+			return CMP_LE;
 	if (i1 -> low >= i2 -> low
-		&& i1 -> upp <= i2 -> upp) return CMP_IN;
+		&& i1 -> upp <= i2 -> upp)
+			return CMP_IN;
 	if (i1 -> low <= i2 -> low
-		&& i1 -> upp >= i2 -> upp) return CMP_OUT;
+		&& i1 -> upp >= i2 -> upp)
+			return CMP_OUT;
 	return CMP_UNK;
 }
 
@@ -196,6 +205,7 @@ arg_min (long double (*f)(long double), const dint_t *s, long double error)
 		iter++;
 		if (iter >= 10000000u) {
 			ui_sndmes (MT_ERROR, "Max iterations reached");
+			break;
 		}
 
 	} while (rbnd - lbnd >= 2.1*error);
@@ -241,11 +251,9 @@ i_cos (dint_t *s)
 dint_t *
 i_tan (dint_t *s)
 {
-	dint_t tmp = *s;
-	i_cos (&tmp);
-	i_mul (&tmp, &tmp);
-	s -> low = s -> upp = 1;
-	i_div (s, &tmp);
+	i_cos (s);
+	i_mul (s, s);
+	i_inv (s);
 	i_dec (s);
 	return i_pow (s, 0.5L);
 }
@@ -324,15 +332,13 @@ i_atan (dint_t *s)
 }
 
 
+// acot x = atan (1 / x)
 dint_t *
 i_acot (dint_t *s)
 {
-	
-	// acot x = atan (1 / x)
-	dint_t tmp = *s;
-	s -> low = s -> upp = 1.0L;
-	i_div (s, &tmp);
+	i_inv (s);
 	return i_atan (s);
+	// Other way: acot x = pi/2 - atan (x)
 }
 
 

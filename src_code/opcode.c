@@ -270,7 +270,7 @@ cmd_to_opcode (cmdcode_t cc, argset_type ast)
 		case ATAN:
 			return (ast == AS_R) ? ATAN_R : OPCODE_ERROR;
 		case ACOT:
-			return (ast == AS_R) ? ATAN_R : OPCODE_ERROR;
+			return (ast == AS_R) ? ACOT_R : OPCODE_ERROR;
 		case CMP:
 			if (ast == AS_RR)  return CMP_RR;
 			else if (ast == AS_RC)  return CMP_RC;
