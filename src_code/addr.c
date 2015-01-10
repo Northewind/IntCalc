@@ -79,3 +79,19 @@ ad_getnew ()
 	static int cur = 10;
 	return cur++;
 }
+
+
+//#define ADDR_DEBUG
+//#include <stdi o.h>
+#ifdef ADDR_DEBUG
+int
+main ()
+{
+	char *smin = "$";
+	char *smax = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
+	int hmin = ad_hash (smin);
+	int hmax = ad_hash (smax);
+	pr ntf ("hmin = %d    hmax = %d\n", hmin, hmax);
+	return 0;
+}
+#endif

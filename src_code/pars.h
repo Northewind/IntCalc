@@ -3,7 +3,7 @@
 
 #include "instr.h"
 
-#define LABEL_SZ 15
+#define LABEL_SZ 32
 #define ADDR_NOEXEC -1
 
 instr_t

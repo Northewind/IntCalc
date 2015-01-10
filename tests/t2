@@ -7,50 +7,50 @@ test1:	mov r1, 10 12
 	cmp r1, r2
 	je equal
 	jmp badans
-equal:	out "good1";call ogood
+equal:	out "good1"
 test2:	mov r1, 10 12
 	mov r2, 16 18
 	cmp r1, r2
 	jne noteq
 	jmp badans
-noteq:	out "good2";call ogood
+noteq:	out "good2"
 test3:	mov r1, 10 12
 	mov r2, 5 9
 	cmp r1, r2
 	jgt great
 	jmp badans
-great:	;out "good3";call ogood
+great:	;out "good3"
 test4:	mov r1, 10 12
 	mov r2, 5 11
 	cmp r1, r2
 	jge gequal
 	jmp badans
-gequal:	;out "good4";call ogood
+gequal:	;out "good4"
 test5:	mov r1, 10 12
 	mov r2, 16 18
 	cmp r1, r2
 	jlt lesse
 	jmp badans
-lesse:	;out "good5";call ogood
+lesse:	out "good5"
 test6:	mov r1, 10 12
 	mov r2, 11 18
-	cmp r1, r2
+	cmp 10 12, r2 
 	jle lequal
 	jmp badans
-lequal:	;out "good6";call ogood
+lequal:	out "good6"
 test7:  mov r1, 10 12
 	mov r2, 5 20
 	cmp r1, r2
 	jin insid
 	jmp badans
-insid:	;out "good7";call ogood
+insid:	;out "good7"
 test8:  mov r1, 10 12
 	mov r2, 11.
 	cmp r1, r2
 	jout outsi
 	jmp badans
-outsi:	;out "good8";call ogood
+outsi:	;out "good8"
 	out "All tests passed"
 	jmp exit
-badans:	out "Bad..." ;call obad
+badans:	out "Bad..."
 exit:	hlt

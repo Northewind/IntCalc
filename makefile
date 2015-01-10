@@ -35,3 +35,6 @@ t4:
 
 t5:
 	$(TEST)/t5 | $(BIN_PATH)/$(OUTF)
+
+t6:
+	$(TEST)/t6 | $(BIN_PATH)/$(OUTF)

@@ -188,7 +188,7 @@ prs_arg_num (char **str)
 	while (isdigit (*++*str));
 	if (**str == '.')  ++*str;
 	while (isdigit (**str))  ++*str;
-	if (isspace (**str)  ||  **str == 0) {
+	if (prs_argend (**str)) {
 		char tmp = **str;
 		**str = 0;
 		double num = atof (nstr);

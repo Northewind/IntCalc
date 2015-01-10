@@ -54,14 +54,14 @@ i_cmp (const dint_t *i1, const dint_t *i2)
 	if (i1 -> low == i2 -> low
 		&& i1 -> upp == i2 -> upp)
 			return CMP_EQ | CMP_GE | CMP_LE | CMP_IN | CMP_OUT;
-	if (i1 -> low >= i2 -> upp)
+	if (i1 -> low > i2 -> upp)
 			return CMP_GT | CMP_NE;
-	if (i1 -> low >= i2 -> low
-		&& i1 -> upp >= i2 -> upp)
-			return CMP_GE;
-	if (i1 -> upp <= i2 -> low)
+	if (i1 -> upp < i2 -> low)
 			return CMP_LT | CMP_NE;
-	if (i1 -> low <= i2 -> low
+	if (i1 -> low >= i2 -> low
+		&& i1 -> upp > i2 -> upp)
+			return CMP_GE;
+	if (i1 -> low < i2 -> low
 		&& i1 -> upp <= i2 -> upp)
 			return CMP_LE;
 	if (i1 -> low >= i2 -> low
