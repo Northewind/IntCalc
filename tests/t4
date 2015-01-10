@@ -1,0 +1,129 @@
+;Testing of
+;1. Comparing operations (inverse)
+;2. Procedure calls
+;3. Forward unconditional jumping
+
+test1:	mov r1, 10 12
+	mov r2, -16 -18.0
+	mov r4, 1	;Comparison operation code
+	cmp r1, r2
+	je badans
+	call ogood
+test2:	mov r1, 10 12
+	mov r2, 11 18
+	mov r4, 2
+	cmp r1, r2 
+	jne badans
+	call ogood
+test3:	mov r1, 10 12
+	mov r2, 11.999 +20.
+	mov r4, 3
+	cmp r1, r2
+	jgt badans
+	call ogood
+test4:	mov r1, 10 12
+	mov r2, 12.0001
+	mov r4, 4
+	cmp r1, r2
+	jge badans
+	call ogood
+test5:	mov r1, 10 12
+	mov r2, -0.9 10.001
+	mov r4, 5
+	cmp r1, r2
+	jlt badans
+	call ogood
+test6:	mov r1, 10 12
+	mov r2, 0.000
+	mov r4, 6
+	cmp r1, r2
+	jle badans 
+	call ogood
+test7:  mov r1, 10 12
+	mov r2, 5 10.1
+	mov r4, 7
+	cmp r1, r2
+	jin badans 
+	call ogood
+test8:  mov r1, 10 12
+	mov r2, 9. 12.345
+	mov r4, 8
+	cmp r1, r2
+	jout badans 
+	call ogood
+	out "All tests passed"
+	jmp exit
+badans:	call obad
+exit:	hlt
+
+
+;Procedures
+;==========
+
+;Print test information
+;input: r1, r2 - comparing values
+;       r4 - compare operation code
+ohead:	out "Test #"
+	inc r3
+	out r3
+	out "Comparison operation (not):"
+	call ocmp
+	out "Comparing of:"
+	out "r1 ="
+	out r1
+	out "r2 ="
+	out r2
+	ret
+
+;Print good result
+;input: r1, r2 - comparing values
+;       r4 - compare operation code
+ogood:	call ohead
+	out "Good!"
+	out ""
+	ret
+
+;Print bad result
+;input: r1, r2 - comparing values
+;       r4 - compare operation code
+obad:	call ohead
+	out "Bad..."
+	out ""
+	ret
+
+;Print name of comparison operation
+;input: r4  (1-eq, 2-ne, 3-gt, 4-ge, 5-lt, 6-le, 7-in, 8-out)
+ocmp:	cmp r4, 1
+	jne n2
+	out "eq"
+	jmp ret
+n2:	cmp r4, 2
+	jne n3
+	out "ne"
+	jmp ret
+n3:	cmp r4, 3
+	jne n4
+	out "gt"
+	jmp ret
+n4:	cmp r4, 4
+	jne n5
+	out "ge"
+	jmp ret
+n5:	cmp r4, 5
+	jne n6
+	out "lt"
+	jmp ret
+n6:	cmp r4, 6
+	jne n7
+	out "le"
+	jmp ret
+n7:	cmp r4, 7
+	jne n8
+	out "in"
+	jmp ret
+n8: 	cmp r4, 8
+	jne n9
+	out "out"
+	jmp ret
+n9:	out "Unknown comparison operation"
+ret:	ret

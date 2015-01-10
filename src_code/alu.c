@@ -324,10 +324,11 @@ i_atan (dint_t *s)
 }
 
 
-// acot x = atan (1 / x)
 dint_t *
 i_acot (dint_t *s)
 {
+	
+	// acot x = atan (1 / x)
 	dint_t tmp = *s;
 	s -> low = s -> upp = 1.0L;
 	i_div (s, &tmp);

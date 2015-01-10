@@ -123,8 +123,8 @@ prs_arg_r (char **str, int *val)
 {
 	argtype_t res = AT_UNDEF;
 	if (**str == 'r') {
-		char *beg = ++*str;
-		while (isdigit (**str))  ++*str;
+		char *beg = *str;
+		while (isdigit (*++*str));
 		if (prs_idchar (**str)) {
 			// Label, starting with 'r'
 			while (prs_idchar (**str))  ++*str;
@@ -133,7 +133,7 @@ prs_arg_r (char **str, int *val)
 				res = AT_A;
 			}
 		}
-		else if (prs_argend (**str)  &&  beg != *str) {
+		else if (prs_argend (**str)  &&  ++beg != *str) {
 			// Register
 			char tmp = **str;
 			**str = 0;
@@ -168,7 +168,7 @@ prs_arg_txt (char **str, int *addr)
 static argtype_t
 prs_arg_a (char **str, int *addr)
 {
-	if (! isalpha (**str))  return AT_UNDEF;
+	if (! prs_idchar (**str))  return AT_UNDEF;
 	char *beg = *str;
 	while (prs_idchar (*++*str));
 	char tmp = **str;
@@ -224,11 +224,16 @@ static argtype_t
 prs_arg (char **str, void *val)
 {
 	argtype_t at;
-	if (**str == 'r')  at = prs_arg_r (str, val);
-	else if (**str == '"')  at = prs_arg_txt (str, val);
-	else if (isalpha (**str))  at = prs_arg_a (str, val);
-	else if (isdigit (**str))  at = prs_arg_dint (str, val);
-	else at = AT_UNDEF;
+	if (**str == 'r')
+		at = prs_arg_r (str, val);
+	else if (**str == '"')
+		at = prs_arg_txt (str, val);
+	else if (isdigit (**str)  ||  **str == '-'  ||  **str == '+')
+		at = prs_arg_dint (str, val);
+	else if (prs_idchar (**str))
+		at = prs_arg_a (str, val);
+	else
+		at = AT_UNDEF;
 	while (isspace (**str))  ++*str;
 	return at;
 }

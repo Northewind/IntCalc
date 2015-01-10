@@ -7,14 +7,12 @@ TEST=cat tests
 all: build run
 
 build:
-	gcc $(OPT) -o $(BIN_PATH)/$(OUTF)
-	clang $(OPT) -o $(BIN_PATH)/$(OUTF)_cl
+	time gcc $(OPT) -o $(BIN_PATH)/$(OUTF)
+	time clang $(OPT) -o $(BIN_PATH)/$(OUTF)_cl
+	ls -l bin/
 
 run:
 	$(BIN_PATH)/$(OUTF)
-	#$(BIN_PATH)/$(OUTF)_cl
-
-
 
 t1:
 	$(TEST)/t1 | $(BIN_PATH)/$(OUTF)
@@ -25,6 +23,8 @@ t2:
 t3:
 	$(TEST)/t3 | $(BIN_PATH)/$(OUTF)
 
+t4:
+	$(TEST)/t4 | $(BIN_PATH)/$(OUTF)
 
 
 dbox: build clean
