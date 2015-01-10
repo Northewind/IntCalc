@@ -7,7 +7,7 @@ ui_sndmes (msg_t type, char *mes)
 {
 	switch (type) {
 		case MT_ERROR:
-			fprintf (stderr, "Ошибка: %s\n", mes);
+			fprintf (stderr, "Error: %s\n", mes);
 			//exit (1);
 			break;
 		case MT_WARN:

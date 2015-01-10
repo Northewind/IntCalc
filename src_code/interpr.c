@@ -11,6 +11,7 @@ main (int argc, char *argv[])
 	instr_t instr;
 	while ( !feof (stdin) ) {
 		fgets (inpstr, 256, stdin);
+		inpstr [255] = 0;
 		instr = parse (inpstr);
 		if (instr.addr != ADDR_NOEXEC)
 			proc (instr);

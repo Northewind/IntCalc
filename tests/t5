@@ -1,7 +1,7 @@
 ;Trigonometric test
 
 start:	mov r10, 0.7
-	out "Testing for interval"
+	out "Testing for value"
 	out r10
 	out ""
 test1:	out "Test:  sin^2 + cos^2 = 1"
