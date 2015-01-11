@@ -38,4 +38,4 @@ t5:
 	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t5
 
 tn:
-	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/tn
+	$(BIN_PATH)/$(OUTF) < $(TESTS)/tn

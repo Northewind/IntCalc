@@ -10,6 +10,7 @@ oc_argset_type (opcode_t oc)
 		case INV_R:
 		case INC_R:
 		case DEC_R:
+		case NEG_R:
 		case SQRT_R:
 		case SIN_R:
 		case COS_R:
@@ -71,6 +72,7 @@ cmd_argset_type (cmdcode_t cc)
 		case INV:
 		case INC:
 		case DEC:
+		case NEG:
 		case SQRT:
 		case SIN:
 		case COS:
@@ -121,6 +123,7 @@ const char *STR_CMD_ADD = "add";
 const char *STR_CMD_SUB = "sub";
 const char *STR_CMD_MUL = "mul";
 const char *STR_CMD_DIV = "div";
+const char *STR_CMD_NEG = "neg";
 const char *STR_CMD_SQRT = "sqrt";
 const char *STR_CMD_INV = "inv";
 const char *STR_CMD_INC = "inc";
@@ -166,6 +169,8 @@ cmd_str (cmdcode_t cc)
 			return STR_CMD_MUL;
 		case DIV:
 			return STR_CMD_DIV;
+		case NEG:
+			return STR_CMD_NEG;
 		case SQRT:
 			return STR_CMD_SQRT;
 		case INV:
@@ -254,6 +259,8 @@ cmd_to_opcode (cmdcode_t cc, argset_type ast)
 			if (ast == AS_RR) return DIV_RR;
 			else if (ast == AS_RC)  return DIV_RC;
 			else return OPCODE_ERROR;
+		case NEG:
+			return (ast == AS_R) ? NEG_R : OPCODE_ERROR;
 		case SQRT:
 			return (ast == AS_R) ? SQRT_R : OPCODE_ERROR;
 		case INV:

@@ -135,6 +135,9 @@ execu (instr_t i)
 		case DIV_RR:
 			i_div (r1, r2);
 			break;
+		case NEG_R:
+			i_neg (r);
+			break;
 		case SQRT_R:
 			i_pow (r, 0.5);
 			break;

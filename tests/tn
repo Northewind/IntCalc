@@ -1,5 +1,89 @@
-;task2:		mov r1, 20  0  +5		;r1 -
-;		mov r2, 
+task5:		mov r1, 1.0 1.6
+		call expon			;r2 = e^r1
+		out r2
+		hlt
+
+;Экспонента e^x
+;Вход:  r1
+;Выход: r2
+;Используются (значения будут потеряны): r3, r4, r5, r6
+expon:		mov r2, 1			;Сумма
+		mov r3, 1			;Счётчик цикла
+		mov r4, 1			;Числитель текущей дроби
+		mov r5, 1			;Знаменатель текущей дроби
+loop:		mul r4, r1
+		mul r5, r3
+		mov r6, r4
+		div r6, r5
+		add r2, r6
+		inc r3
+		cmp r3, 1000
+		jlt loop
+		ret
+
+
+
+
+task4:		;Исходные данные:
+		mov r1, 0.27			;r1 = δD
+		mov r2, 0.43			;r2 = δd 
+		mov r3, 30 +1 -1		;r3 = α
+		mov r4, 0.74			;r4 = δH
+		;Вычисляем:
+		div r3, 2			;α/2
+		tan r3				;tg (α/2)
+		mul r3, 2			;2 tg (α/2)
+		add r1, r2			;δD + δd
+		div r1, r3			;(δD + δd) / (2 tg (α/2))
+		add r1, r4			;(δD + δd) / (2 tg (α/2)) + δH
+		;Результат в r1, выводим:
+		out r1
+		hlt
+
+
+
+
+task3:		;Вводим исходные данные
+		mov		r1, 90 -1 1		;r1 = α = 90±1
+		mov		r2, 0.43		;r2 = δD = 0,43
+		;Вычисления по формуле
+		div		r1, 2			;α/2
+		sin		r1			;sin(α/2)
+		inv		r1			;1/sin(α/2)
+		dec		r1			;1/sin(α/2) - 1
+		div		r2, 2			;δD/2
+		mul		r1, r2			;δD/2 * (1/sin(α/2)-1)
+		;Результат в r1, выводим
+		out		"E_H1 = "
+		out		r1
+		hlt
+
+
+
+
+task2:		;Исходные данные
+		mov  r1,  20  0  +5		;r1 - размер α
+		mov  r2,  50  -0.2 +0.2		;r2 - размер A
+		mov  r10, 70  -2  +5		;r10 - размер β
+		mov  r20, 40  -0.15  +0.15	;r20 - размер B
+		;Вычисляем
+		neg  r10
+		add  r10,  180			;180 - β
+		add  r10,  r1			;α + 180 - β
+		cos  r10			;cos (α + 180 - β)
+		mul  r10, r2			;cos (α + 180 - β)*A
+		mul  r10, r20			;cos (α + 180 - β)*A*B
+		mul  r10, 2			;cos (α + 180 - β)*A*B*2
+		neg  r10			;-cos (α + 180 - β)*A*B*2
+		mul  r20, r20			;B*B
+		mul  r2,  r2			;A*A
+		add  r10, r20			;cos (α + 180 - β)*A*B*2 + B*B
+		add  r10, r2			;cos (α + 180 - β)*A*B*2 + B*B + A*A
+		sqrt r10
+		;Выводим результат
+		out  r10
+		hlt
+
 
 
 

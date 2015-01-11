@@ -28,7 +28,7 @@ Usage: icalc [parameters]\n\
 \n\
     Supported commands:\n\
       mov, xchg,\n\
-      add, sub, mul, div, sqrt, inv, inc, dec,\n\
+      add, sub, mul, div, neg, sqrt, inv, inc, dec,\n\
       sin, cos, tan, cot, asin, acos, atan, acot,\n\
       jmp, cmp, je, jne, jgt, jge, jlt, jle, jin, jout,\n\
       nop, hlt, out, free, ret, call.\n\
