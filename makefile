@@ -7,8 +7,8 @@ TEST=cat tests
 all: build run
 
 build:
-	time gcc $(OPT) -o $(BIN_PATH)/$(OUTF)
 	time clang $(OPT) -o $(BIN_PATH)/$(OUTF)_cl
+	time gcc $(OPT) -o $(BIN_PATH)/$(OUTF)
 	ls -l bin/
 
 run:

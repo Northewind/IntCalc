@@ -1,10 +1,21 @@
 #ifndef UINTER_H
 #define UINTER_H
 
+// For UINTER_CLI
+#include "interpr.h"
 
 typedef enum {
 	MT_ERROR,  MT_WARN,  MT_RSLT,  MT_INFO
 } msg_t;
+
+
+#ifdef UINTER_CLI
+typedef enum {
+	MB_PRINT,  MB_PRINT_EXIT
+} mes_behav_t;
+
+mes_behav_t onerrors;
+#endif  // UINTER_CLI
 
 
 void

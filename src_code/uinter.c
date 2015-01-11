@@ -2,13 +2,24 @@
 #include <stdlib.h>
 #include "uinter.h"
 
+
+#ifdef UINTER_CLI
+mes_behav_t onerrors = MB_PRINT;
+
+
 void
 ui_sndmes (msg_t type, char *mes)
 {
 	switch (type) {
 		case MT_ERROR:
-			fprintf (stderr, "Error: %s\n", mes);
-			//exit (1);
+			switch (onerrors) {
+				case MB_PRINT:
+					fprintf (stderr, "Error: %s\n", mes);
+					break;
+				case MB_PRINT_EXIT:
+					fprintf (stderr, "Error: %s\n", mes);
+					exit (1);
+			}
 			break;
 		case MT_WARN:
 			fprintf (stderr, "Warning: %s\n", mes);
@@ -22,4 +33,5 @@ ui_sndmes (msg_t type, char *mes)
 			break;
 	}
 }
+#endif  // UINTER_CLI
 
