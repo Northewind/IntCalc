@@ -1,3 +1,11 @@
+/*
+ Return addresses stack (CALL/RET commands)
+ Address calculating
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
 #ifndef ADDR_H
 #define ADDR_H
 

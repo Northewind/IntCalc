@@ -1,3 +1,11 @@
+/*
+ Calculating flow control
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef CU_H
 #define CU_H
 

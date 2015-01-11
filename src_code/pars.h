@@ -1,3 +1,11 @@
+/*
+ Instruction parser
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef PARS_H
 #define PARS_H
 

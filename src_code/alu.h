@@ -1,3 +1,11 @@
+/*
+ All interval arithmetic and logics operations
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef ALU_H
 #define ALU_H
 

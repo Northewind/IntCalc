@@ -1,0 +1,52 @@
+;task2:		mov r1, 20  0  +5		;r1 -
+;		mov r2, 
+
+
+
+task1:		mov r1, 20  -0.1  0.1		;r1 - размер А
+		mov r2, 30  -0.05  0.05		;r2 - размер α
+		call tria1
+		;Вывод результатов
+		out "Bh = "
+		out r3
+		out "Bv = "
+		out r4
+		hlt
+
+;Вычисление Bh и Bv
+;Вход: r1 - размер A
+;      r2 - размер α
+;Выход: r3 - размер Bh
+;       r4 - размер Bv
+tria1:		mov r3, r2				;r3 = α
+		cos r3					;r3 = cos (r3)
+		mul r3, r1				;r3 = r3 * r1
+		mov r4, r2				;r4 = α
+		sin r4					;r4 = sin (r4)
+		mul r4, r1				;r4 = r4 * r1
+		ret
+
+
+
+
+;Example of CALL/RET usage
+task0:	 	mov  r1, 49.6  50		;Размер по чертежу
+		mov  r2, 50.2			;Размер факт., дет №1
+		call print_quality_conc		;Вызов print_quality_conc
+		mov  r2, 49.8			;Размер факт., дет №2
+		call print_quality_conc		;Вызов print_quality_conc
+		mov  r2, 50			;Размер факт., дет №3
+		call print_quality_conc		;Вызов print_quality_conc
+		hlt
+
+;Вывод сообщения о годности
+;Вход: r1 - размер по чертежу
+;      r2 - размер фактический
+print_quality_conc:
+		cmp  r2, r1
+		jin  part_good
+		out  "The part has defect"
+		ret				;Выход из подпрограммы
+part_good:	out "The part is good"
+		ret				;Выход из подпрограммы
+

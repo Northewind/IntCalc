@@ -1,3 +1,11 @@
+/*
+ Variables storage
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef VARS_H
 #define VARS_H
 

@@ -26,7 +26,8 @@ prs_uncomm (char **str)
 		if (*c == '"')	  inqout = ! inqout;
 		if (*c == ';'  &&  ! inqout)   break;
 	}
-	while (isspace (* --c));
+	c--;
+	while (isspace (*c)  &&  c >= *str)  c--;
 	c [1] = 0;
 }
 

@@ -1,3 +1,11 @@
+/*
+ Output to user
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef UINTER_H
 #define UINTER_H
 

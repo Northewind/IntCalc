@@ -1,3 +1,11 @@
+/*
+ Interpreter input
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef INTERPR_H
 #define INTERPR_H
 
@@ -5,7 +13,7 @@
 #define INFO_VERSION  ("\
 icalc (interval calculator) 0.5\n\
 Copyright (C) 2015 Alexander Loshkin\n\
-This program is free software. It comes with ABSOLUTELY NO WARRANTY\n\
+This program is free software. It comes with ABSOLUTELY NO WARRANTY.\n\
 ")
 
 
@@ -20,7 +28,7 @@ Usage: icalc [parameters]\n\
 \n\
     Supported commands:\n\
       mov, xchg,\n\
-      add, sub, mul, div, inv, inc, dec,\n\
+      add, sub, mul, div, sqrt, inv, inc, dec,\n\
       sin, cos, tan, cot, asin, acos, atan, acot,\n\
       jmp, cmp, je, jne, jgt, jge, jlt, jle, jin, jout,\n\
       nop, hlt, out, free, ret, call.\n\

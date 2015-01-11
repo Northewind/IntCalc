@@ -2,7 +2,8 @@ SRC_PATH=src_code
 BIN_PATH=bin
 OPT= -g -std=c99  -lm  $(SRC_PATH)/*.c
 OUTF=icalc
-TEST=cat tests
+TESTS=tests
+
 
 all: build run
 
@@ -22,19 +23,19 @@ clean:
 	rm $(BIN_PATH)/$(OUTF) $(BIN_PATH)/$(OUTF)_cl
 
 t1:
-	$(TEST)/t1 | $(BIN_PATH)/$(OUTF)
+	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t1
 
 t2:
-	$(TEST)/t2 | $(BIN_PATH)/$(OUTF)
+	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t2
 
 t3:
-	$(TEST)/t3 | $(BIN_PATH)/$(OUTF)
+	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t3
 
 t4:
-	$(TEST)/t4 | $(BIN_PATH)/$(OUTF)
+	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t4
 
 t5:
-	$(TEST)/t5 | $(BIN_PATH)/$(OUTF)
+	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t5
 
-t6:
-	$(TEST)/t6 | $(BIN_PATH)/$(OUTF)
+tn:
+	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/tn

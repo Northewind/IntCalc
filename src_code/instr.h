@@ -1,3 +1,11 @@
+/*
+ Instruction queue
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
 #ifndef INSTR_H
 #define INSTR_H
 

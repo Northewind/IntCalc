@@ -1,3 +1,12 @@
+/*
+ Operation codes
+
+ Copyright (c) 2015
+ Loshkin A.A. <alswayer@ya.ru>
+*/
+
+
+
 #ifndef OPCODE_H
 #define OPCODE_H
 
@@ -8,7 +17,7 @@ typedef enum {
 	MOV_RC,  MOV_RR,  XCHG_RR,
 	ADD_RC,  ADD_RR,
 	SUB_RC,  SUB_RR,
-	MUL_RC,  MUL_RR,
+	MUL_RC,  MUL_RR, SQRT_R,
 	DIV_RC,  DIV_RR,
 	INV_R,
 	INC_R,   DEC_R,
@@ -79,7 +88,7 @@ typedef enum {
 
 typedef enum {
 	CMD_ERROR = -1,
-	MOV,  XCHG, ADD, SUB, MUL,  DIV,  INV,  INC,  DEC,
+	MOV,  XCHG, ADD, SUB, MUL,  SQRT, DIV,  INV,  INC,  DEC,
 	SIN,  COS,  TAN, COT, ASIN, ACOS, ATAN, ACOT,
 	CMP,  JMP,  JE,  JNE, JGT,  JGE,  JLT,  JLE,  JIN, JOUT,
 	CALL, RET,  OUT, NOP, FREE, HLT
