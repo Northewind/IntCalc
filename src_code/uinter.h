@@ -9,8 +9,10 @@
 #ifndef UINTER_H
 #define UINTER_H
 
-// For UINTER_CLI
-#include "interpr.h"
+
+// UINTER_CLI, ...
+#include "main.h"
+
 
 typedef enum {
 	MT_ERROR,  MT_WARN,  MT_RSLT,  MT_INFO

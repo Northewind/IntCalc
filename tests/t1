@@ -1,4 +1,4 @@
-start:	out "Posledovatelnost Fibbonacci (12 chlenov)"
+start:	out "Fibonacci sequence"
 	mov r1, 1  10
 	mov r2, 1  12
 	out r1
@@ -8,7 +8,7 @@ loop:	add r1, r2
 	out r1
 	xchg r1, r2
 	inc r3
-	cmp r3, 10
+	cmp r3, 10	;First 10 numbers only
 	jlt loop
 exit:	hlt
 

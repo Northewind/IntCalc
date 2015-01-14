@@ -62,6 +62,7 @@ oc_argset_type (opcode_t oc)
 		case OPCODE_ERROR:
 			return AS_ERROR;
 	}
+	return AS_ERROR;
 }
 
 
@@ -114,6 +115,7 @@ cmd_argset_type (cmdcode_t cc)
 		case CMD_ERROR:
 			return AS_ERROR;
 	}
+	return AS_ERROR;
 }
 
 
@@ -230,6 +232,7 @@ cmd_str (cmdcode_t cc)
 		case CMD_ERROR:
 			return NULL;
 	}
+	return NULL;
 }
 
 
@@ -326,5 +329,5 @@ cmd_to_opcode (cmdcode_t cc, argset_type ast)
 		case CMD_ERROR:
 			return OPCODE_ERROR;
 	}
-
+	return OPCODE_ERROR;
 }

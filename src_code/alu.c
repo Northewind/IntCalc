@@ -6,13 +6,15 @@
 #include "uinter.h"
 
 #define M_PIl          3.141592653589793238462643383279502884L 
-#define COMP_ERROR     0.000000001L
+#define COMP_ERROR     0.0000000001L
+
 
 dint_t
 i_crt  (long double nom)
 {
 	return (dint_t) { .low = nom,  .upp = nom };
 }
+
 
 dint_t
 i_crt2 (long double lim1, long double lim2)
@@ -219,13 +221,11 @@ sind (long double x)
 	return sinl (x / 180.0L * M_PIl);
 }
 
-
 static long double
 sind_neg (long double x)
 {
 	return -sind (x);
 }
-
 
 dint_t *
 i_sin (dint_t *s)
@@ -238,33 +238,56 @@ i_sin (dint_t *s)
 }
 
 
+static long double
+cosd (long double x)
+{
+	return cosl (x / 180.0L * M_PIl);
+}
+
+static long double
+cosd_neg (long double x)
+{
+	return -cosd (x);
+}
+
 dint_t *
 i_cos (dint_t *s)
 {
-	s -> low += 90.0L;
-	s -> upp += 90.0L;
-	return i_sin (s);
+	long double low = cosd (arg_min (&cosd, s, COMP_ERROR));
+	long double upp = cosd (arg_min (&cosd_neg, s, COMP_ERROR));
+	s -> low = low;
+	s -> upp = upp;
+	return s;
 }
 
 
-// tan = sqrt (1 / (cos^2) - 1)
+static long double
+tand (long double x)
+{
+	return tanl (x / 180.0L * M_PIl);
+}
+
+static long double
+tand_neg (long double x)
+{
+	return -tand (x);
+}
+
 dint_t *
 i_tan (dint_t *s)
 {
-	i_cos (s);
-	i_mul (s, s);
-	i_inv (s);
-	i_dec (s);
-	return i_pow (s, 0.5L);
+	long double low = tand (arg_min (&tand, s, COMP_ERROR));
+	long double upp = tand (arg_min (&tand_neg, s, COMP_ERROR));
+	s -> low = low;
+	s -> upp = upp;
+	return s;
 }
 
 
 dint_t *
 i_cot (dint_t *s)
 {	
-	dint_t si = *s;
-	i_div (i_cos (s), i_sin (&si));
-	return s;
+	return i_inv (i_tan (s));
 }
 
 
@@ -293,17 +316,27 @@ i_asin (dint_t *s)
 }
 
 
-// acos x = 2 * asin (sqrt ((1 - x) / 2))
+static long double
+acosd (long double x)
+{
+	return acosl (x) / M_PIl * 180.0L;
+}
+
+
+static long double
+acosd_neg (long double x)
+{
+	return -acosd (x);
+}
+
 dint_t *
 i_acos (dint_t *s)
 {
-	i_neg (s);
-	i_inc (s);
-	dint_t tmp = { .low = 2.0L, .upp = 2.0L };
-	i_div (s, &tmp);
-	i_pow (s, 0.5L);
-	i_asin (s);
-	return i_mul (s, &tmp);
+	long double low = acosd (arg_min (&acosd, s, COMP_ERROR));
+	long double upp = acosd (arg_min (&acosd_neg, s, COMP_ERROR));
+	s -> low = low;
+	s -> upp = upp;
+	return s;
 }
 
 
@@ -313,13 +346,11 @@ atand (long double x)
 	return atanl (x) / M_PIl * 180.0L;
 }
 
-
 static long double
 atand_neg (long double x)
 {
 	return -atand (x);
 }
-
 
 dint_t *
 i_atan (dint_t *s)
@@ -347,7 +378,8 @@ char *
 i_asstr (const dint_t *s)
 {
 	char *res = malloc (STR_SZ);
-	if (s -> low  ==  s -> upp)
+	long double tol = fabsl (s -> upp - s -> low);
+	if (tol <= 0.000001L)
 		snprintf (res, STR_SZ, "%.3Lf", s -> low);
 	else
 		snprintf (res, STR_SZ, "%.3Lf  %.3Lf", s -> low, s -> upp);

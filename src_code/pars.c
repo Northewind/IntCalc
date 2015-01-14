@@ -306,6 +306,7 @@ prs_args (char **str, argset_t *as)
 		case AT_UNDEF:
 			return AS_ERROR;
 	}
+	return AS_ERROR;
 }
 
 

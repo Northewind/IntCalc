@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "main.h"
 #include "instr.h"
 #include "pars.h"
 #include "cu.h"
@@ -7,10 +8,28 @@
 #include "interpr.h"
 
 
+#define INFO_HELP ("\
+Usage: icalc [parameters]\n\
+  Interval calculator-intepreter with assembly syntax.\n\
+  It reads stdin and writes into stdout.\n\
+    Parameters:\n\
+    -h, --help      This help\n\
+    -v, --version   Version info\n\
+    -W              Exit on errors\n\
+\n\
+    Supported commands:\n\
+      mov, xchg,\n\
+      add, sub, mul, div, neg, sqrt, inv, inc, dec,\n\
+      sin, cos, tan, cot, asin, acos, atan, acot,\n\
+      jmp, cmp, je, jne, jgt, jge, jlt, jle, jin, jout,\n\
+      nop, hlt, out, free, ret, call.\n\
+")
+
+
 extern mes_behav_t onerrors;
 
 
-void
+static void
 interprete ()
 {
 	char inpstr [256];
@@ -26,21 +45,22 @@ interprete ()
 }
 
 
-void
+static void
 version ()
 {
-	puts (INFO_VERSION);
+	printf ("%s %s\n%s\n%s\n",
+		ABOUT_NAME, ABOUT_VERS, ABOUT_RIGHT, ABOUT_LICEN);
 }
 
 
-void
+static void
 help ()
 {
 	puts (INFO_HELP);
 }
 
 
-void
+static void
 invalpar ()
 {
 	help ();
@@ -48,9 +68,9 @@ invalpar ()
 
 
 int
-main (int argc, char *argv[])
+main_interpr (int argc, char *argv[])
 {
-	int i, j;
+	int i;
 	for (i = 1;  i < argc;  i++) {
 		if (!strcmp (argv [i], "-v")) {
 			version ();

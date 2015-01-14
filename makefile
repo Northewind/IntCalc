@@ -1,6 +1,6 @@
 SRC_PATH=src_code
 BIN_PATH=bin
-OPT= -g -std=c99  -lm  $(SRC_PATH)/*.c
+OPT=-Wall -g -std=c99  -lm  $(SRC_PATH)/*.c
 OUTF=icalc
 TESTS=tests
 
@@ -20,7 +20,7 @@ dbox: build clean
 	cp -R ./* ~/Public/Dropbox/workspace/intcalc
 
 clean:
-	rm $(BIN_PATH)/$(OUTF) $(BIN_PATH)/$(OUTF)_cl
+	rm $(BIN_PATH)/*
 
 t1:
 	$(BIN_PATH)/$(OUTF) -W < $(TESTS)/t1

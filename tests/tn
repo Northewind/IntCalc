@@ -1,3 +1,62 @@
+task_fig14:
+		mov r1, 30  1 -1
+		mov r2, 120 1 -1
+		mov r3, 100 1 -1
+		call fig14
+		out "Результат по фиг. 14:"
+		out r100
+		hlt
+
+fig14:		mov r101, r1
+		mov r102, r2
+		tan r101
+		tan r102
+		mov r100, r3
+		mul r100, r101
+		mul r100, r102
+		add r101, r102
+		div r100, r101
+		ret
+
+
+
+
+task_fig27:	;Исходные данные
+		mov r1, 50 -0.5  0.5		;r1 = x[1] = 50
+		mov r2, 45 -0.5  0.5		;r2 = x[2] = 45
+		mov r3, 70 -0.3  0.3		;r3 = x[3] = 70
+		mov r4, 50 -0.5  0.5		;r4 = x[4] = 50
+		mov r5, 20 -0.2  0.2		;r5 = x[5] = 20
+		mov r6, 7  -0.5  0.5		;r6 = x[6] = 7
+		call fig27			;Вызываем процедуру расчёта - fig27
+		out "Результат:"
+		out r100
+		hlt				;Выход
+
+;Расчёт по фиг. 27
+;Вход: r1...r6 - размеры x[1]...x[6]
+;Выход: r100
+;Используются (значения будут потеряны): r100, r101, r103, r105
+fig27:		mov r103, r3			;r3
+		mov r105, r5			;r5
+		tan r103			;tan(r3)
+		tan r105			;tan(r5)
+		mov r100, 0
+		sub r100, r4			;-r4
+		sub r100, r6			;-r4-r6
+		mov r101, r103
+		mul r101, r1			;r1*tan(r3)
+		add r100, r101			;r1*tan(r3)-r4-r6
+		mov r101, r105
+		mul r101, r2			;r2*tan(r5)
+		add r100, r101			;r1*tan(r3)+r2*tan(r5)-r4-r6
+		sub r103, r105			;tan(r3)-tan(r5)
+		div r100, r103
+		ret
+
+
+
+
 task5:		mov r1, 1.0 1.6
 		call expon			;r2 = e^r1
 		out r2
