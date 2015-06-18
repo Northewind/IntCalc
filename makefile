@@ -1,4 +1,4 @@
-SRC_PATH=src_code
+SRC_PATH=source
 BIN_PATH=bin
 OPT=-Wall -g -std=c99  -lm  $(SRC_PATH)/*.c
 OUTF=icalc
